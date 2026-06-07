@@ -1,0 +1,25 @@
+Documento interno ficticio — Uso: apoio a compradores e analistas em negociacoes de fornecimento
+
+Titulo: Prazo de validade, curva de consumo e tempo de permanencia em estoque
+
+1. Objetivo
+Orientar a equipe de compras e a analise de suprimentos na avaliacao de propostas em que o lote minimo ou o volume negociado impactam risco de obsolescencia, vencimento e capital empatado.
+
+2. Prazo de validade (shelf life) na mesa de negociacao
+- Solicitar ao fornecedor a data de fabricacao tipica, a validade nominal do lote e a politica de FEFO/FIFO na cadeia.
+- Para insumos com validade curta (ex.: abaixo de 12 meses), exigir em contrato clausula de aceite de devolucao ou substituicao proporcional quando o recebimento ocorrer com menos de X% da vida util restante (parametro a definir por categoria, usualmente 70% a 85%).
+- Registrar no cadastro do item: vida util em dias, alerta amarelo (ex.: 120 dias antes do vencimento) e alerta vermelho (ex.: 60 dias), para acionar promocao interna ou ajuste de formula.
+
+3. Tempo de permanencia em estoque (dwell time)
+- Definir meta de giro em dias para cada classe ABC: itens A devem permanecer o minimo possivel; itens C podem admitir estoque de seguranca maior, desde que nao haja risco regulatório ou químico.
+- Quando o lote minimo do fornecedor implica cobertura superior a N meses de consumo, documentar o "excesso estrutural" e estimar custo de oportunidade (taxa de capital aplicada sobre o valor do estoque extra).
+- Em auditoria de negociacao, comparar dwell time medio pos-compra com a projecao feita na aprovacao; desvios superiores a 20% devem gerar revisao da politica de lote ou alternativa de fornecedor.
+
+4. Checklist rapido para reuniao com fornecedor
+[ ] Validade minima garantida no recebimento
+[ ] Lote unico vs multiplos lotes na mesma entrega
+[ ] Possibilidade de fracionamento ou consignacao para SKU de baixo giro
+[ ] Compromisso de alerta antecipado em lote proximo ao vencimento
+
+5. Observacao
+Valores numericos neste guia sao exemplificativos; cada unidade de negocio deve alinhar limiares com qualidade, regulacao e capacidade de armazenagem.

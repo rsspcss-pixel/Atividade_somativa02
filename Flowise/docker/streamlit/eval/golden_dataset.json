@@ -1,0 +1,330 @@
+[
+  {
+    "id": "armaz_01_componentes_custo",
+    "input": "Quais sao os principais componentes de custo de armazenagem extra que devemos considerar na negociacao com fornecedores?",
+    "expected_output": "Os componentes do modelo simplificado incluem: custo de ocupacao (metro quadrado ou palete-dia, incluindo corredor e empilhamento), manuseio incremental (movimentacoes extras, conferencia ampliada, segregacao de lote), servicos especiais (refrigeracao, controle de umidade, seguro ad valorem sobre estoque parado) e risco de obsolescencia (provisao quando o estoque ultrapassa a cobertura alvo em meses).",
+    "context": [
+      "Componentes de custo: ocupacao, manuseio incremental, servicos especiais e risco de obsolescencia associados a lotes minimos elevados ou armazem climatizado."
+    ]
+  },
+  {
+    "id": "armaz_02_objetivo_documento",
+    "input": "Qual e o objetivo do documento interno sobre custo de armazenagem adicional?",
+    "expected_output": "Padronizar como estimar e alocar custos de armazenagem extra associados a lotes minimos elevados, entregas antecipadas ou necessidade de armazem climatizado, de forma a sustentar contrapropostas e clausulas contratuais.",
+    "context": [
+      "Objetivo: padronizar estimativa e alocacao de custos de armazenagem extra para sustentar contrapropostas e clausulas contratuais."
+    ]
+  },
+  {
+    "id": "armaz_03_delta_armazenagem",
+    "input": "Como usar o delta de armazenagem como argumento quando o lote minimo obriga compra acima do ponto de reordenacao economico?",
+    "expected_output": "Apresentar o delta de armazenagem estimado em R$/unidade ou R$/mes como argumento para negociar desconto por volume, flexibilizacao de lote ou frete bonificado junto ao fornecedor.",
+    "context": [
+      "Quando o lote minimo obriga compra acima do ponto de reordenacao economico, apresentar delta de armazenagem em R$/unidade ou R$/mes."
+    ]
+  },
+  {
+    "id": "armaz_04_entrega_fracionada",
+    "input": "O que negociar em contratos com entrega unica grande para reduzir impacto de armazenagem?",
+    "expected_output": "Negociar opcao de entrega fracionada sem custo adicional ou com fee logistico tabelado, evitando concentrar volume em uma unica entrega que eleva ocupacao e manuseio.",
+    "context": [
+      "Para contratos com entrega unica grande, negociar entrega fracionada sem custo adicional ou com fee logistico tabelado."
+    ]
+  },
+  {
+    "id": "armaz_05_registro_ata",
+    "input": "Quais itens logisticos devem ser registrados em ata de negociacao com fornecedor?",
+    "expected_output": "Registrar quem assume custo de cross-docking, devolucao de embalagens retornaveis e taxas de permanencia (demurrage) em porto ou transportador, quando aplicavel.",
+    "context": [
+      "Registrar em ata: cross-docking, devolucao de embalagens retornaveis e demurrage em porto ou transportador."
+    ]
+  },
+  {
+    "id": "armaz_06_indicador_logistico",
+    "input": "Qual indicador acompanha custo logistico total em relacao ao valor comprado?",
+    "expected_output": "Custo logistico total dividido pelo valor comprado, calculado em janela rolling de 12 meses, por categoria.",
+    "context": [
+      "Indicador: custo logistico total / valor comprado (rolling 12 meses), por categoria."
+    ]
+  },
+  {
+    "id": "armaz_07_gap_dwell_lote",
+    "input": "Como calcular o gap de dias de estoque atribuivel a politica de lote minimo do fornecedor?",
+    "expected_output": "Comparar dias de estoque medio com dias de estoque explicados pelo lote minimo; o gap representa o dwell atribuivel a politica do fornecedor.",
+    "context": [
+      "Dias de estoque medio vs dias explicados pelo lote minimo (gap = dwell atribuivel a politica do fornecedor)."
+    ]
+  },
+  {
+    "id": "armaz_08_armazem_terceiros",
+    "input": "Que ocorrencia operacional deve ser monitorada quando picos de compra geram armazenagem externa?",
+    "expected_output": "Ocorrencias de armazenagem temporaria externa (terceiros) ligadas a picos de compra, pois sinalizam pressao sobre capacidade interna e custo logistico adicional.",
+    "context": [
+      "Monitorar armazenagem temporaria externa (terceiros) ligada a picos de compra."
+    ]
+  },
+  {
+    "id": "armaz_09_ocupacao_palete",
+    "input": "Como deve ser calculado o custo de ocupacao no modelo simplificado de armazenagem?",
+    "expected_output": "Aplicar metro quadrado ou palete-dia ao espaco adicional projetado pelo lote minimo, incluindo corredor e empilhamento na estimativa.",
+    "context": [
+      "Custo de ocupacao: m2 ou palete-dia no espaco adicional do lote minimo, incluindo corredor e empilhamento."
+    ]
+  },
+  {
+    "id": "armaz_10_manuseio_incremental",
+    "input": "O que compoe o manuseio incremental na estimativa de armazenagem extra?",
+    "expected_output": "Movimentacoes extras, conferencia ampliada e segregacao de lote, decorrentes de volumes ou lotes acima do padrao operacional.",
+    "context": [
+      "Manuseio incremental: movimentacoes extras, conferencia ampliada, segregacao de lote."
+    ]
+  },
+  {
+    "id": "armaz_11_servicos_especiais",
+    "input": "Cite exemplos de servicos especiais que entram no custo de armazenagem adicional.",
+    "expected_output": "Refrigeracao, controle de umidade e seguro ad valorem sobre estoque parado.",
+    "context": [
+      "Servicos especiais: refrigeracao, controle de umidade, seguro ad valorem sobre estoque parado."
+    ]
+  },
+  {
+    "id": "armaz_12_limite_documento",
+    "input": "O documento de custo de armazenagem substitui a tabela oficial da controladoria?",
+    "expected_output": "Nao. O documento serve para alinhar linguagem entre compras, logistica e financeiro antes do fechamento de precos, mas nao substitui a tabela oficial de custos da controladoria.",
+    "context": [
+      "Observacao: nao substitui tabela oficial da controladoria; alinha linguagem entre areas."
+    ]
+  },
+  {
+    "id": "valid_01_objetivo_guia",
+    "input": "Qual e o objetivo do guia sobre prazo de validade e permanencia em estoque?",
+    "expected_output": "Orientar compras e analise de suprimentos na avaliacao de propostas em que lote minimo ou volume negociado impactam risco de obsolescencia, vencimento e capital empatado.",
+    "context": [
+      "Objetivo: orientar avaliacao de propostas quando lote minimo ou volume impactam obsolescencia, vencimento e capital empatado."
+    ]
+  },
+  {
+    "id": "valid_02_informacoes_fornecedor",
+    "input": "Que informacoes sobre validade devemos solicitar ao fornecedor na mesa de negociacao?",
+    "expected_output": "Data de fabricacao tipica, validade nominal do lote e politica de FEFO/FIFO na cadeia de suprimentos.",
+    "context": [
+      "Solicitar: data de fabricacao tipica, validade nominal do lote e politica FEFO/FIFO."
+    ]
+  },
+  {
+    "id": "valid_03_clausula_vida_util",
+    "input": "Para insumos com validade curta, que clausula contratual e recomendada no recebimento?",
+    "expected_output": "Clausula de aceite de devolucao ou substituicao proporcional quando o recebimento ocorrer com menos de X% da vida util restante, parametro usualmente entre 70% e 85% por categoria.",
+    "context": [
+      "Validade curta (<12 meses): clausula de devolucao/substituicao se recebimento tiver menos de X% da vida util (70%-85%)."
+    ]
+  },
+  {
+    "id": "valid_04_alertas_cadastro",
+    "input": "Quais alertas de validade devem constar no cadastro do item?",
+    "expected_output": "Vida util em dias, alerta amarelo (ex.: 120 dias antes do vencimento) e alerta vermelho (ex.: 60 dias), para acionar promocao interna ou ajuste de formula.",
+    "context": [
+      "Cadastro: vida util em dias, alerta amarelo (~120 dias) e alerta vermelho (~60 dias antes do vencimento)."
+    ]
+  },
+  {
+    "id": "valid_05_classe_abc_giro",
+    "input": "Como a classe ABC influencia a meta de giro e permanencia em estoque?",
+    "expected_output": "Itens A devem permanecer o minimo possivel em estoque; itens C podem admitir estoque de seguranca maior, desde que nao haja risco regulatorio ou quimico.",
+    "context": [
+      "Classe ABC: A com permanencia minima; C pode ter estoque de seguranca maior sem risco regulatorio/quimico."
+    ]
+  },
+  {
+    "id": "valid_06_excesso_estrutural",
+    "input": "O que documentar quando o lote minimo implica cobertura superior a N meses de consumo?",
+    "expected_output": "Documentar o excesso estrutural e estimar custo de oportunidade aplicando taxa de capital sobre o valor do estoque extra.",
+    "context": [
+      "Lote minimo com cobertura > N meses: documentar excesso estrutural e custo de oportunidade (taxa de capital sobre estoque extra)."
+    ]
+  },
+  {
+    "id": "valid_07_auditoria_desvio",
+    "input": "Quando um desvio de dwell time pos-compra deve gerar revisao de politica de lote?",
+    "expected_output": "Quando o dwell time medio pos-compra superar em mais de 20% a projecao feita na aprovacao da negociacao, deve-se revisar politica de lote ou buscar fornecedor alternativo.",
+    "context": [
+      "Desvios de dwell time >20% vs projecao na aprovacao: revisar politica de lote ou fornecedor."
+    ]
+  },
+  {
+    "id": "valid_08_checklist_validade_minima",
+    "input": "O que verificar no checklist rapido sobre validade minima garantida no recebimento?",
+    "expected_output": "Confirmar validade minima garantida no recebimento como item obrigatorio do checklist antes da reuniao ou fechamento com o fornecedor.",
+    "context": [
+      "Checklist: validade minima garantida no recebimento."
+    ]
+  },
+  {
+    "id": "valid_09_checklist_lote_unico",
+    "input": "Por que avaliar lote unico versus multiplos lotes na mesma entrega?",
+    "expected_output": "Multiplos lotes ou lote unico impactam rastreabilidade, FEFO/FIFO e risco de vencimento; deve-se alinhar formato de entrega com curva de consumo e politica de validade.",
+    "context": [
+      "Checklist: lote unico vs multiplos lotes na mesma entrega."
+    ]
+  },
+  {
+    "id": "valid_10_fracionamento_consignacao",
+    "input": "Quais alternativas negociar para SKU de baixo giro com risco de obsolescencia?",
+    "expected_output": "Possibilidade de fracionamento ou consignacao para SKU de baixo giro, reduzindo capital empatado e risco de vencimento.",
+    "context": [
+      "Checklist: fracionamento ou consignacao para SKU de baixo giro."
+    ]
+  },
+  {
+    "id": "valid_11_alerta_vencimento",
+    "input": "Que compromisso pedir ao fornecedor sobre lotes proximos ao vencimento?",
+    "expected_output": "Compromisso de alerta antecipado quando houver lote proximo ao vencimento, permitindo acao preventiva de compras e qualidade.",
+    "context": [
+      "Checklist: compromisso de alerta antecipado em lote proximo ao vencimento."
+    ]
+  },
+  {
+    "id": "valid_12_fefo_fifo",
+    "input": "O que significa exigir politica FEFO/FIFO do fornecedor?",
+    "expected_output": "FEFO (First Expired, First Out) prioriza saida pelo vencimento mais proximo; FIFO (First In, First Out) prioriza ordem de entrada. Ambas reduzem risco de obsolescencia e devem ser explicitadas na cadeia.",
+    "context": [
+      "Solicitar politica FEFO/FIFO na cadeia de suprimentos."
+    ]
+  },
+  {
+    "id": "neg_01_integracao_temas",
+    "input": "Como combinar argumentos de armazenagem e validade na mesma contraproposta a um fornecedor?",
+    "expected_output": "Estimar delta de armazenagem do lote minimo elevado em paralelo ao risco de obsolescencia e custo de oportunidade do excesso de cobertura, apresentando impacto financeiro integrado para justificar desconto, fracionamento ou clausulas de validade minima.",
+    "context": [
+      "Armazenagem extra e validade/dwell time devem ser quantificados juntos na negociacao de lote minimo."
+    ]
+  },
+  {
+    "id": "neg_02_publico_documentos",
+    "input": "Quem sao os publicos-alvo dos documentos internos de negociacao de compras?",
+    "expected_output": "Compradores, analistas financeiros e analistas de suprimentos envolvidos em negociacoes, recomposicao de precos e avaliacao de propostas.",
+    "context": [
+      "Publico: compradores e analistas financeiros; compradores e analistas de suprimentos."
+    ]
+  },
+  {
+    "id": "neg_03_risco_obsolescencia_provisao",
+    "input": "Quando aplicar provisao de risco de obsolescencia no modelo de armazenagem?",
+    "expected_output": "Quando o estoque projetado ultrapassa a cobertura alvo em meses, aplicando percentual de provisao sugerido pela analise de risco.",
+    "context": [
+      "Risco de obsolescencia: provisao quando estoque ultrapassa cobertura alvo em meses."
+    ]
+  },
+  {
+    "id": "neg_04_entrega_antecipada",
+    "input": "Que situacao operacional justifica custo de armazenagem extra alem do lote minimo?",
+    "expected_output": "Entregas antecipadas e necessidade de armazem climatizado, alem de lotes minimos elevados, justificam estimativa de armazenagem adicional.",
+    "context": [
+      "Armazenagem extra associada a lotes minimos elevados, entregas antecipadas ou armazem climatizado."
+    ]
+  },
+  {
+    "id": "neg_05_custo_oportunidade",
+    "input": "Como estimar custo de oportunidade do estoque extra causado por lote minimo?",
+    "expected_output": "Documentar excesso estrutural de cobertura e multiplicar o valor do estoque extra pela taxa de capital aplicada, obtendo custo de oportunidade financeiro.",
+    "context": [
+      "Custo de oportunidade: taxa de capital aplicada sobre valor do estoque extra."
+    ]
+  },
+  {
+    "id": "neg_06_parametro_vida_util",
+    "input": "Qual faixa percentual de vida util restante e usual para aceite de recebimento de insumos sensiveis?",
+    "expected_output": "Parametro a definir por categoria, usualmente entre 70% e 85% da vida util restante no recebimento.",
+    "context": [
+      "Clausula de aceite quando recebimento tem menos de X% da vida util; usual 70%-85%."
+    ]
+  },
+  {
+    "id": "neg_07_alerta_amarelo_vermelho",
+    "input": "Qual a finalidade dos alertas amarelo e vermelho de validade no cadastro?",
+    "expected_output": "Antecipar acoes de promocao interna, ajuste de formula ou negociacao com fornecedor antes do vencimento, com limiares exemplificativos de 120 e 60 dias.",
+    "context": [
+      "Alertas amarelo (120 dias) e vermelho (60 dias) acionam promocao interna ou ajuste de formula."
+    ]
+  },
+  {
+    "id": "neg_08_valores_exemplificativos",
+    "input": "Os limiares numericos dos guias internos sao obrigatorios para todas as unidades?",
+    "expected_output": "Nao necessariamente. Valores numericos sao exemplificativos; cada unidade de negocio deve alinhar limiares com qualidade, regulacao e capacidade de armazenagem.",
+    "context": [
+      "Valores numericos exemplificativos; alinhar limiares com qualidade, regulacao e armazenagem."
+    ]
+  },
+  {
+    "id": "neg_09_segregacao_lote",
+    "input": "Por que a segregacao de lote aumenta custo de manuseio na armazenagem extra?",
+    "expected_output": "Segregar lotes exige movimentacoes e conferencias adicionais para manter rastreabilidade e FEFO/FIFO, elevando manuseio incremental.",
+    "context": [
+      "Manuseio incremental inclui segregacao de lote."
+    ]
+  },
+  {
+    "id": "neg_10_seguro_ad_valorem",
+    "input": "Em que situacao considerar seguro ad valorem no custo de armazenagem?",
+    "expected_output": "Sobre estoque parado ou de giro lento, como servico especial do modelo de armazenagem, refletindo risco financeiro do capital immobilizado.",
+    "context": [
+      "Servicos especiais incluem seguro ad valorem sobre estoque parado."
+    ]
+  },
+  {
+    "id": "neg_11_cross_docking",
+    "input": "Por que registrar responsabilidade de cross-docking na ata de negociacao?",
+    "expected_output": "Evitar disputa posterior sobre quem absorve custo logistico de transferencia rapida entre transporte e armazenagem ou expedicao.",
+    "context": [
+      "Ata deve registrar quem assume custo de cross-docking."
+    ]
+  },
+  {
+    "id": "neg_12_embalagens_retornaveis",
+    "input": "O que negociar sobre embalagens retornaveis em contratos de suprimento?",
+    "expected_output": "Definir em ata quem assume custo de devolucao de embalagens retornaveis, impactando custo logistico total e condicoes de entrega.",
+    "context": [
+      "Registrar devolucao de embalagens retornaveis na ata de negociacao."
+    ]
+  },
+  {
+    "id": "edge_01_fora_escopo",
+    "input": "Qual a receita de bolo de chocolate recomendada para eventos corporativos?",
+    "expected_output": "Este assistente trata de negociacao de compras, armazenagem, validade e suprimentos. Nao possuo base para receitas culinarias; reformule a pergunta no contexto de procurement.",
+    "context": [
+      "Documentos cobrem armazenagem, validade e negociacao com fornecedores — nao receitas."
+    ]
+  },
+  {
+    "id": "edge_02_sem_dado_numerico",
+    "input": "Qual o valor exato em reais do palete-dia na nossa tabela de controladoria?",
+    "expected_output": "O documento interno nao substitui a tabela oficial da controladoria e nao fixa valores monetarios de palete-dia; consulte a controladoria ou parametros financeiros oficiais da empresa.",
+    "context": [
+      "Documento nao substitui tabela oficial de custos da controladoria."
+    ]
+  },
+  {
+    "id": "edge_03_resumo_executivo",
+    "input": "Resuma em tres topicos o que um comprador deve levar para reuniao sobre lote minimo elevado.",
+    "expected_output": "1) Delta de armazenagem (ocupacao, manuseio, servicos especiais e risco de obsolescencia) em R$/unidade ou R$/mes. 2) Impacto de validade e dwell time, incluindo clausulas de vida util e fracionamento. 3) Itens de ata: cross-docking, embalagens retornaveis e demurrage, se aplicavel.",
+    "context": [
+      "Negociacao de lote minimo combina armazenagem, validade e registros em ata."
+    ]
+  },
+  {
+    "id": "edge_04_comparacao_fefo_fifo",
+    "input": "Em insumo quimico com validade critica, FEFO ou FIFO deve prevalecer?",
+    "expected_output": "Para validade critica, FEFO costuma prevalecer por priorizar o vencimento mais proximo; confirme com qualidade e regulacao da categoria e explicite a politica exigida ao fornecedor.",
+    "context": [
+      "Solicitar politica FEFO/FIFO; itens com risco quimico/regulatorio exigem cuidado na permanencia em estoque."
+    ]
+  },
+  {
+    "id": "edge_05_pico_compra",
+    "input": "Detectamos pico de compra e uso de armazem terceirizado. Que acao de negociacao sugere?",
+    "expected_output": "Revisar lote minimo e calendario de entregas com o fornecedor, negociando fracionamento ou fee logistico tabelado, e monitorar indicador de custo logistico total sobre valor comprado.",
+    "context": [
+      "Armazenagem temporaria externa ligada a picos de compra; entrega fracionada e indicadores logisticos."
+    ]
+  }
+]

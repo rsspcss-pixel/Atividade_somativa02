@@ -1,0 +1,18 @@
+# Segredos locais (nunca commitar)
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.streamlit/cloud-secrets.toml
+
+# Artefatos gerados em runtime
+.deepeval/
+data/chroma/
+data/compras.duckdb
+data/*.wal
+ml/models/*.pkl
+__pycache__/
+*.pyc
+
+# Ficheiros acidentais com segredos
+Untitled
