@@ -27,6 +27,8 @@ Starts Flowise from [DockerHub Image](https://hub.docker.com/r/flowiseai/flowise
 ### Streamlit Cloud
 
 - **Main file path:** `Flowise/docker/streamlit/app.py`
+- **Flowise publico:** veja [docs/deploy-flowise-public.md](../docs/deploy-flowise-public.md)
+- Run `.\deploy-flowise-public.ps1 -OpenRender` then provision with your Render URL
 - Run `.\deploy-streamlit-cloud.ps1` for deploy checklist and `cloud-secrets.toml`
 
 ## 🌱 Env Variables

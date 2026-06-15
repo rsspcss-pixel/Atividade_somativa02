@@ -1,0 +1,38 @@
+# Render Blueprint — Flowise publico (Streamlit Cloud)
+# Dashboard: New -> Blueprint -> repo Atividade_somativa02
+
+services:
+  - type: web
+    name: flowise-lumina
+    runtime: docker
+    dockerfilePath: ./Flowise/docker/Dockerfile.flowise-cloud
+    dockerContext: ./Flowise/docker
+    plan: starter
+    healthCheckPath: /api/v1/ping
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 3000
+      - key: DATABASE_PATH
+        value: /opt/render/.flowise
+      - key: SECRETKEY_PATH
+        value: /opt/render/.flowise
+      - key: LOG_PATH
+        value: /opt/render/.flowise/logs
+      - key: BLOB_STORAGE_PATH
+        value: /opt/render/.flowise/storage
+      - key: DISABLE_FLOWISE_TELEMETRY
+        value: "true"
+      - key: FLOWISE_CLOUD
+        value: "1"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: FLOWISE_USERNAME
+        sync: false
+      - key: FLOWISE_PASSWORD
+        sync: false
+    disk:
+      name: flowise-data
+      mountPath: /opt/render/.flowise
+      sizeGB: 1

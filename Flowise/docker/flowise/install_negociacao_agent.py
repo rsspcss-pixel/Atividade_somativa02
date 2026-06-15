@@ -3,6 +3,7 @@ Instala o agentflow principal (Assistente de Negociacao) e as custom tools no Fl
 
 Uso (na pasta docker/):
   python flowise/install_negociacao_agent.py
+  python flowise/install_negociacao_agent.py --cloud
   python flowise/install_negociacao_agent.py --db C:/Users/ramon/.flowise/database.sqlite
 """
 
@@ -17,11 +18,8 @@ from pathlib import Path
 from agent_config import (
     AGENT_FLOW_NAME,
     CHATFLOW_ID,
-    DEFAULT_CHAT_MODEL,
-    MAX_TOKENS,
-    MEMORY_WINDOW,
-    TEMPERATURE,
     TOOL_NAMES,
+    build_flow_data,
     build_system_message,
 )
 
@@ -77,85 +75,6 @@ def upsert_tool(conn: sqlite3.Connection, workspace_id: str, name: str) -> str:
     return tool_id
 
 
-def build_flow_data(credential_id: str | None) -> dict:
-    model_config: dict = {
-        "cache": "",
-        "modelName": DEFAULT_CHAT_MODEL,
-        "temperature": TEMPERATURE,
-        "streaming": True,
-        "maxTokens": MAX_TOKENS,
-        "topP": "",
-        "frequencyPenalty": "",
-        "presencePenalty": "",
-        "timeout": "",
-        "baseOptions": "",
-        "agentModel": "chatOpenAICustom",
-        "basepath": "http://host.docker.internal:1234/v1",
-    }
-    if credential_id:
-        model_config["FLOWISE_CREDENTIAL_ID"] = credential_id
-
-    return {
-        "nodes": [
-            {
-                "id": "startAgentflow_0",
-                "type": "agentFlow",
-                "position": {"x": 100, "y": 120},
-                "data": {
-                    "id": "startAgentflow_0",
-                    "label": "Start",
-                    "version": 1.1,
-                    "name": "startAgentflow",
-                    "type": "Start",
-                    "inputs": {"startInputType": "chatInput"},
-                },
-            },
-            {
-                "id": "agentAgentflow_0",
-                "type": "agentFlow",
-                "position": {"x": 420, "y": 120},
-                "data": {
-                    "id": "agentAgentflow_0",
-                    "label": AGENT_FLOW_NAME,
-                    "version": 1.1,
-                    "name": "agentAgentflow",
-                    "type": "Agent",
-                    "inputs": {
-                        "agentModel": "chatOpenAICustom",
-                        "agentMessages": [{"role": "system", "content": build_system_message()}],
-                        "agentTools": [
-                            {
-                                "agentSelectedTool": tool_name,
-                                "agentSelectedToolRequiresHumanInput": "",
-                            }
-                            for tool_name in TOOL_NAMES
-                        ],
-                        "agentKnowledgeDocumentStores": [],
-                        "agentKnowledgeVSEmbeddings": "",
-                        "agentEnableMemory": True,
-                        "agentMemoryType": "windowSize",
-                        "agentMemoryWindowSize": MEMORY_WINDOW,
-                        "agentUserMessage": "",
-                        "agentReturnResponseAs": "assistantMessage",
-                        "agentStructuredOutput": "",
-                        "agentUpdateState": "",
-                        "agentModelConfig": model_config,
-                    },
-                },
-            },
-        ],
-        "edges": [
-            {
-                "id": "edge_start_agent",
-                "source": "startAgentflow_0",
-                "target": "agentAgentflow_0",
-                "type": "agentFlow",
-                "data": {"sourceColor": "#7EE787", "targetColor": "#4DD0E1"},
-            }
-        ],
-    }
-
-
 def get_workspace_and_credential(conn: sqlite3.Connection) -> tuple[str, str | None]:
     row = conn.execute("SELECT id FROM workspace LIMIT 1").fetchone()
     if not row:
@@ -171,8 +90,14 @@ def get_workspace_and_credential(conn: sqlite3.Connection) -> tuple[str, str | N
     return workspace_id, cred[0] if cred else None
 
 
-def upsert_chatflow(conn: sqlite3.Connection, workspace_id: str, credential_id: str | None) -> None:
-    flow_data = json.dumps(build_flow_data(credential_id), ensure_ascii=False)
+def upsert_chatflow(
+    conn: sqlite3.Connection,
+    workspace_id: str,
+    credential_id: str | None,
+    *,
+    cloud: bool = False,
+) -> None:
+    flow_data = json.dumps(build_flow_data(credential_id, cloud=cloud), ensure_ascii=False)
     existing = conn.execute("SELECT id FROM chat_flow WHERE id = ?", (CHATFLOW_ID,)).fetchone()
     if existing:
         conn.execute(
@@ -196,6 +121,11 @@ def upsert_chatflow(conn: sqlite3.Connection, workspace_id: str, credential_id: 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Instala agentflow Assistente Negociacao no Flowise")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
+    parser.add_argument(
+        "--cloud",
+        action="store_true",
+        help="Perfil cloud (OpenAI gpt-4o-mini, sem tools Docker)",
+    )
     args = parser.parse_args()
 
     if not args.db.is_file():
@@ -206,19 +136,25 @@ def main() -> int:
 
     conn = sqlite3.connect(str(args.db))
     workspace_id, credential_id = get_workspace_and_credential(conn)
-    tool_ids = [upsert_tool(conn, workspace_id, name) for name in TOOL_NAMES]
-    upsert_chatflow(conn, workspace_id, credential_id)
+    tool_ids: list[str] = []
+    if not args.cloud:
+        tool_ids = [upsert_tool(conn, workspace_id, name) for name in TOOL_NAMES]
+    upsert_chatflow(conn, workspace_id, credential_id, cloud=args.cloud)
     conn.commit()
     conn.close()
 
-    print(f"Tools instaladas: {', '.join(f'{n} ({tid})' for n, tid in zip(TOOL_NAMES, tool_ids))}")
-    print(f"Agentflow '{AGENT_FLOW_NAME}' pronto (id={CHATFLOW_ID})")
+    if tool_ids:
+        print(f"Tools instaladas: {', '.join(f'{n} ({tid})' for n, tid in zip(TOOL_NAMES, tool_ids))}")
+    print(f"Agentflow '{AGENT_FLOW_NAME}' pronto (id={CHATFLOW_ID}, cloud={args.cloud})")
     print(f"Prediction URL: http://localhost:3000/api/v1/prediction/{CHATFLOW_ID}")
     print(f"Conhecimento: {len(build_system_message())} chars no system prompt")
-    if not credential_id:
+    if args.cloud and not credential_id:
         print("")
-        print("AVISO: Nenhuma credencial OpenAI encontrada no Flowise.")
-        print("       Abra http://localhost:3000 -> Credentials e crie 'OpenAI API' apontando para:")
+        print("AVISO: Adicione credencial OpenAI no Flowise (Settings -> Credentials).")
+        print("       Depois reexecute: python flowise/install_negociacao_agent.py --cloud")
+    elif not args.cloud and not credential_id:
+        print("")
+        print("AVISO: Crie credencial OpenAI Custom apontando para LM Studio:")
         print("       Base URL: http://host.docker.internal:1234/v1  |  API Key: lm-studio")
     print("")
     print("Streamlit: use FLOWISE_API_TOKEN=local-dev se o chatflow nao tiver API key atribuida.")

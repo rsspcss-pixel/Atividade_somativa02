@@ -1,0 +1,19 @@
+# Flowise publico (Render / cloud) — imagem oficial + bootstrap do agentflow Lumina
+FROM flowiseai/flowise:latest
+
+USER root
+
+RUN apk add --no-cache python3 py3-pip curl \
+    && pip3 install --no-cache-dir --break-system-packages requests
+
+WORKDIR /bootstrap
+COPY flowise/agent_config.py flowise/install_negociacao_agent.py flowise/wait_and_seed.py ./
+COPY flowise/tools ./tools
+
+ENV DATABASE_PATH=/opt/render/.flowise
+ENV FLOWISE_CLOUD=1
+
+COPY flowise/docker-entrypoint-cloud.sh /docker-entrypoint-cloud.sh
+RUN chmod +x /docker-entrypoint-cloud.sh
+
+ENTRYPOINT ["/docker-entrypoint-cloud.sh"]

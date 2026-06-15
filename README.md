@@ -27,23 +27,19 @@ Sem LM Studio (só testar interface, chat pode não responder ao LLM):
 ## Streamlit Cloud
 
 1. Faça push deste repositório para o GitHub.
-2. Acesse [share.streamlit.io](https://share.streamlit.io) e conecte o repositório `Atividade_somativa02`.
-3. Configure:
+2. **Flowise publico (obrigatório para o chat):** siga [Flowise/docs/deploy-flowise-public.md](Flowise/docs/deploy-flowise-public.md) — deploy no Render + secrets.
+3. Acesse [share.streamlit.io](https://share.streamlit.io) e conecte o repositório `Atividade_somativa02`.
+4. Configure:
    - **Main file path:** `Flowise/docker/streamlit/app.py`
    - **Branch:** `main`
-4. Em **Settings → Secrets**, cole o conteúdo gerado por:
+5. Em **Settings → Secrets**, cole o conteúdo de `Flowise/docker/streamlit/.streamlit/cloud-secrets.toml` (gerado por `deploy-flowise-public.ps1`).
 
 ```powershell
 cd Flowise/docker
-.\setup.ps1
-# Edite streamlit/.env: FLOWISE_API_URL com URL pública HTTPS do Flowise
-cd ..
-.\deploy-streamlit-cloud.ps1
+.\deploy-flowise-public.ps1 -OpenRender
+# apos deploy Render:
+.\deploy-flowise-public.ps1 -FlowiseUrl "https://SUA-URL.onrender.com" -Email "..." -Password "..." -Register
 ```
-
-Abra `Flowise/docker/streamlit/.streamlit/cloud-secrets.toml` e cole no painel de Secrets.
-
-> O Streamlit Cloud precisa alcançar o Flowise por **URL pública HTTPS**. `localhost` e `http://flowise:3000` só funcionam no Docker local.
 
 ## Estrutura principal
 

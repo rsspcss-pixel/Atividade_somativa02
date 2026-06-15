@@ -8,6 +8,7 @@ CHATFLOW_ID = "f92dd892-ced9-4396-863b-9675b17242fb"
 AGENT_FLOW_NAME = "Assistente Negociacao"
 TOOL_NAMES = ("buscar_insumo_duckdb", "classificar_risco_renegociacao")
 DEFAULT_CHAT_MODEL = "google/gemma-3-4b"
+CLOUD_CHAT_MODEL = "gpt-4o-mini"
 
 # Respostas ageis: menos tokens gerados e menos contexto no prompt
 MAX_TOKENS = "384"
@@ -62,3 +63,106 @@ def build_system_message() -> str:
         "Se faltar dado, diga o que falta em 1 linha.\n\n"
         f"CONHECIMENTO BASE:\n{knowledge}"
     )
+
+
+def build_flow_data(credential_id: str | None = None, *, cloud: bool = False) -> dict:
+    """Monta flowData do agentflow (local=LM Studio, cloud=OpenAI)."""
+    if cloud:
+        model_config: dict = {
+            "cache": "",
+            "modelName": CLOUD_CHAT_MODEL,
+            "temperature": TEMPERATURE,
+            "streaming": True,
+            "maxTokens": MAX_TOKENS,
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "baseOptions": "",
+            "agentModel": "chatOpenAI",
+        }
+        tool_names: tuple[str, ...] = ()
+    else:
+        model_config = {
+            "cache": "",
+            "modelName": DEFAULT_CHAT_MODEL,
+            "temperature": TEMPERATURE,
+            "streaming": True,
+            "maxTokens": MAX_TOKENS,
+            "topP": "",
+            "frequencyPenalty": "",
+            "presencePenalty": "",
+            "timeout": "",
+            "baseOptions": "",
+            "agentModel": "chatOpenAICustom",
+            "basepath": "http://host.docker.internal:1234/v1",
+        }
+        tool_names = TOOL_NAMES
+
+    if credential_id:
+        model_config["FLOWISE_CREDENTIAL_ID"] = credential_id
+
+    return {
+        "nodes": [
+            {
+                "id": "startAgentflow_0",
+                "type": "agentFlow",
+                "position": {"x": 100, "y": 120},
+                "data": {
+                    "id": "startAgentflow_0",
+                    "label": "Start",
+                    "version": 1.1,
+                    "name": "startAgentflow",
+                    "type": "Start",
+                    "inputs": {"startInputType": "chatInput"},
+                },
+            },
+            {
+                "id": "agentAgentflow_0",
+                "type": "agentFlow",
+                "position": {"x": 420, "y": 120},
+                "data": {
+                    "id": "agentAgentflow_0",
+                    "label": AGENT_FLOW_NAME,
+                    "version": 1.1,
+                    "name": "agentAgentflow",
+                    "type": "Agent",
+                    "inputs": {
+                        "agentModel": model_config["agentModel"],
+                        "agentMessages": [{"role": "system", "content": build_system_message()}],
+                        "agentTools": [
+                            {
+                                "agentSelectedTool": tool_name,
+                                "agentSelectedToolRequiresHumanInput": "",
+                            }
+                            for tool_name in tool_names
+                        ],
+                        "agentKnowledgeDocumentStores": [],
+                        "agentKnowledgeVSEmbeddings": "",
+                        "agentEnableMemory": True,
+                        "agentMemoryType": "windowSize",
+                        "agentMemoryWindowSize": MEMORY_WINDOW,
+                        "agentUserMessage": "",
+                        "agentReturnResponseAs": "assistantMessage",
+                        "agentStructuredOutput": "",
+                        "agentUpdateState": "",
+                        "agentModelConfig": model_config,
+                    },
+                },
+            },
+        ],
+        "edges": [
+            {
+                "id": "edge_start_agent",
+                "source": "startAgentflow_0",
+                "target": "agentAgentflow_0",
+                "type": "agentFlow",
+                "data": {"sourceColor": "#7EE787", "targetColor": "#4DD0E1"},
+            }
+        ],
+    }
+
+
+def prediction_url(base_url: str) -> str:
+    base = base_url.rstrip("/")
+    return f"{base}/api/v1/prediction/{CHATFLOW_ID}"
