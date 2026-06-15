@@ -1,0 +1,25 @@
+Documento interno ficticio — Uso: compradores e analistas financeiros em negociacoes e recomposicao de precos
+
+Titulo: Custo de armazenagem adicional, ocupacao de espaco e servicos logisticos extraordinarios
+
+1. Objetivo
+Padronizar como estimar e alocar custos de armazenagem "extra" associados a lotes minimos elevados, entregas antecipadas ou necessidade de armazem climatizado, de forma a sustentar contrapropostas e clausulas contratuais.
+
+2. Componentes de custo (modelo simplificado)
+- Custo de ocupacao: metro quadrado ou palete-dia aplicado ao espaco adicional projetado pelo lote minimo (incluir corredor e empilhamento).
+- Manuseio incremental: movimentacoes extras, conferencia ampliada, segregacao de lote.
+- Servicos especiais: refrigeracao, controle de umidade, seguro ad valorem sobre estoque parado.
+- Risco de obsolescencia: percentual de provisao sugerido pela analise quando o estoque projetado ultrapassa cobertura alvo em meses.
+
+3. Na negociacao com o fornecedor
+- Quando o lote minimo obriga compra acima do ponto de reordenacao economico, apresentar o "delta de armazenagem" estimado em R$/unidade ou R$/mes, como argumento para desconto por volume, flexibilizacao de lote ou frete bonificado.
+- Para contratos com entrega unica grande, negociar opcao de entrega fracionada sem custo adicional ou com fee logistico tabelado.
+- Registrar em ata: quem assume custo de cross-docking, devolucao de embalagens retornaveis e taxas de permanencia (demurrage) em porto ou transportador, se aplicavel.
+
+4. Indicadores de acompanhamento
+- Custo logistico total / valor comprado (rolling 12 meses), por categoria.
+- Dias de estoque medio vs dias de estoque "explicados" pelo lote minimo (gap = dwell atribuivel a politica do fornecedor).
+- Ocorrencias de armazenagem temporaria externa (terceiros) ligadas a picos de compra.
+
+5. Observacao
+Este documento nao substitui a tabela oficial de custos da controladoria; serve para alinhar linguagem entre compras, logistica e financeiro antes de fechamento de precos.

@@ -1,0 +1,29 @@
+# Segredos locais (nunca commitar)
+.env
+.env.*
+!.env.example
+**/.streamlit/secrets.toml
+**/.streamlit/cloud-secrets.toml
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/venv/
+
+# Node (Flowise monorepo)
+**/node_modules/
+**/.turbo/
+**/dist/
+**/build/
+
+# Dados gerados em runtime
+Flowise/docker/streamlit/data/compras.duckdb
+Flowise/docker/streamlit/data/*.wal
+Flowise/docker/streamlit/data/chroma/
+Flowise/docker/streamlit/ml/models/*.pkl
+
+# IDE
+.idea/
+.vscode/
+*.vsix

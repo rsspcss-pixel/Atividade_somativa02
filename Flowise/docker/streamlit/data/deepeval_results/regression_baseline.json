@@ -1,0 +1,426 @@
+{
+  "run_id": "b94167e8-01ae-45ce-bd72-bd53ff4add0e",
+  "created_at": "2026-06-07T18:54:34.136785+00:00",
+  "chatflow_target": "http://flowise:3000/api/v1/prediction/f92dd892-ced9-4396-863b-9675b17242fb",
+  "metric_name": "Regressao (resposta vs golden)",
+  "metric_threshold": 0.7,
+  "total_cases": 41,
+  "passed_cases": 0,
+  "failed_cases": 41,
+  "pass_rate": 0.0,
+  "mean_score": 0.3073,
+  "duration_ms": 1182290,
+  "cases": [
+    {
+      "golden_id": "armaz_01_componentes_custo",
+      "input": "Quais sao os principais componentes de custo de armazenagem extra que devemos considerar na negociacao com fornecedores?",
+      "expected_output": "Os componentes do modelo simplificado incluem: custo de ocupacao (metro quadrado ou palete-dia, incluindo corredor e empilhamento), manuseio incremental (movimentacoes extras, conferencia ampliada, segregacao de lote), servicos especiais (refrigeracao, controle de umidade, seguro ad valorem sobre estoque parado) e risco de obsolescencia (provisao quando o estoque ultrapassa a cobertura alvo em meses).",
+      "actual_output": "Com base nos documentos fornecidos, os principais componentes de custo de armazenagem extra a serem considerados na negociação com fornecedores são:\n\n*   **Redução dos Descartes de SKU’s para o Grupo por Vencimento:** Evitar perdas devido ao vencimento de produtos.\n*   **Redução de Custo com Capital Empregado em Estoques:** Otimizar os níveis de estoque para minimizar o capital investido.\n*   **Melhor Equilíbrio no Dimensionamento do Custo Global de Produção e Abastecimento:** Ajustes que impactem diretamente nos custos de armazenagem.\n\nAdicionalmente, a análise de lotes EOQ (Economic Order Quantity) apresenta oportunidades de redução de tamanho de lote, com potencial máximo de R$ 13 milhões (7% do total), além de economias de R$ 2,5 milhões e a eliminação de 1789 itens sem necessidade de produção/compra nos últimos seis meses. A otimização do giro de estoques em lotes, através de ferramentas como simulações e análises de redução de lotes, também contribui para minimizar os custos de armazenagem.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses SKU reduction, EOQ analysis, and inventory turnover optimization, which are relevant concepts. However, it lacks the specific cost components (square meter/pallet-day, handling, special services, obsolescence risk) outlined in the expected output. There is a clear regression in terms of detail and the inclusion of key cost categories, indicating a significant deviation from the reference material.",
+      "duration_ms": 35460
+    },
+    {
+      "golden_id": "armaz_02_objetivo_documento",
+      "input": "Qual e o objetivo do documento interno sobre custo de armazenagem adicional?",
+      "expected_output": "Padronizar como estimar e alocar custos de armazenagem extra associados a lotes minimos elevados, entregas antecipadas ou necessidade de armazem climatizado, de forma a sustentar contrapropostas e clausulas contratuais.",
+      "actual_output": "O documento interno sobre o custo de armazenagem adicional visa, primordialmente, a redução dos descartes de *stock keeping units* (SKUs) para o Grupo devido ao vencimento, bem como a diminuição do capital empregado em estoques. Além disso, busca-se um melhor equilíbrio entre os custos globais de produção e abastecimento, evitando desperdícios no lançamento de novos produtos e otimizando o planejamento através da padronização e da metodologia EOQ (Economic Order Quantity). Especificamente, a implementação do cálculo EOQ tem como potencial máximo reduzir custos em R$ 13 milhões (7% do total), além de eliminar a necessidade de produção/compra de 1.789 itens nos últimos seis meses e analisar o giro de estoques em lotes através de ferramentas como simulações e análises de redução de lotes, visando uma meta de redução de 10% dos lotes cadastrados.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses cost reduction strategies related to inventory management, including EOQ calculations and stock rotation analysis. However, it significantly deviates from the expected output's focus on estimating and allocating costs for elevated minimum lot sizes, expedited deliveries, or climate-controlled warehousing – concepts entirely absent in the actual response. While some relevant terms like 'estoques' (stocks) are present, there’s a clear decline in factual accuracy and alignment with the core intent of the expected output.",
+      "duration_ms": 30682
+    },
+    {
+      "golden_id": "armaz_03_delta_armazenagem",
+      "input": "Como usar o delta de armazenagem como argumento quando o lote minimo obriga compra acima do ponto de reordenacao economico?",
+      "expected_output": "Apresentar o delta de armazenagem estimado em R$/unidade ou R$/mes como argumento para negociar desconto por volume, flexibilizacao de lote ou frete bonificado junto ao fornecedor.",
+      "actual_output": "Com base nos documentos fornecidos, o delta de armazenagem pode ser utilizado como argumento no cálculo do lote econômico (EOQ) para otimizar a compra e reduzir custos. Especificamente, o documento detalha um projeto que visa reduzir o tamanho dos lotes, com potencial máximo de redução de R$ 13 milhões (7% do total), através da implementação e atualização do EOQ.\n\nAs estratégias incluem:\n\n*   **Ajustes no Cálculo EOQ:** Realização de novos cálculos considerando a demanda mensal e outros fatores relevantes.\n*   **Redução de Lotes:** Utilização de \"ranges\" de roteiros atuais ou alternativos, análise de dias de cobertura e demanda futura para determinar a redução ideal dos lotes.\n*   **Trade-off com Fornecedores:** Avaliação do custo versus benefício ao negociar com fornecedores, buscando otimizar a quantidade de lotes.\n\nO objetivo principal é diminuir os descartes de SKU’s, reduzir o capital empregado em estoques e melhorar o equilíbrio entre custos de produção e abastecimento.",
+      "score": 0.4,
+      "passed": false,
+      "reason": "The actual output discusses strategies for using storage delta in EOQ calculations to reduce costs, which is partially aligned with the expected output's focus on negotiating discounts. However, it includes details about specific actions like adjusting EOQ and reducing lot sizes that are not present in the expected output. There’s a clear regression as the actual output expands upon the concept beyond simply using the delta for negotiation.",
+      "duration_ms": 30076
+    },
+    {
+      "golden_id": "armaz_04_entrega_fracionada",
+      "input": "O que negociar em contratos com entrega unica grande para reduzir impacto de armazenagem?",
+      "expected_output": "Negociar opcao de entrega fracionada sem custo adicional ou com fee logistico tabelado, evitando concentrar volume em uma unica entrega que eleva ocupacao e manuseio.",
+      "actual_output": "Para reduzir o impacto da armazenagem em contratos de entrega única grande, é crucial negociar os seguintes pontos, conforme a documentação do Projeto Lotes:\n\n*   **Redução dos Descartes de SKU’s:** Diminuir o volume de itens que se tornam obsoletos devido ao vencimento.\n*   **Redução do Custo com Capital Empregado em Estoques:** Otimizar os níveis de estoque para minimizar custos de armazenagem e capital investido.\n*   **Melhor Equilíbrio no Dimensionamento dos Custos:** Ajustar a produção e o abastecimento para otimizar os custos globais.\n*   **Evitar Desperdícios no Lançamento de Novos Produtos:** Melhorar a visibilidade do custo real dos projetos, assegurando um planejamento mais eficiente.\n*   **Planejamento Otimizado:** Implementar uma metodologia padronizada e conceituada para otimizar o planejamento.\n\nAdicionalmente, é importante considerar as seguintes ações propostas na documentação:\n\n*   **Teste de Aderência do Cálculo de Lote EOQ:** Verificar a precisão dos cálculos de lote econômico (EOQ).\n*   **Implementação e Atualização do Lote EOQ:** Ajustar a ferramenta manual, atualizar a demanda mensal e recalcular o lote EOQ.\n*   **Garantir Meta de Giro de Estoques em Lotes:** Utilizar ferramentas de desdobramento de metas, simulações e análises para reduzir os lotes. Isso pode incluir:\n    *   Utilização de \"ranges\" de roteiros atuais ou alternativos (PA’s).\n    *   Análise de dias de cobertura (PA’s e insumos).\n    *   Análise de demanda mensal futura (PA’s e insumos).\n    *   Trade-off de custos versus benefícios com fornecedores.\n\nAo negociar, busque reduzir o tamanho dos lotes para diminuir os riscos associados ao armazenamento e otimizar a gestão do capital de giro.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses several strategies for inventory management (reducing SKU obsolescence, optimizing stock levels, etc.) which are present in the reference material. However, it deviates significantly from the expected output's core suggestion of 'fractional delivery options without additional cost,' failing to retain the key concept of avoiding large single deliveries. There is a clear regression in focus and a lack of alignment with the expected outcome.",
+      "duration_ms": 41825
+    },
+    {
+      "golden_id": "armaz_05_registro_ata",
+      "input": "Quais itens logisticos devem ser registrados em ata de negociacao com fornecedor?",
+      "expected_output": "Registrar quem assume custo de cross-docking, devolucao de embalagens retornaveis e taxas de permanencia (demurrage) em porto ou transportador, quando aplicavel.",
+      "actual_output": "Na ata de negociação com fornecedores, os seguintes itens logísticos devem ser registrados para otimizar o processo e reduzir custos:\n\n*   **Redução de Descartes por Vencimento:** Minimizar perdas de estoque devido a produtos vencidos.\n*   **Redução do Custo com Capital Empregado em Estoques:** Otimizar o capital investido em armazenagem, buscando um equilíbrio entre disponibilidade e custo.\n*   **Melhor Equilíbrio no Dimensionamento dos Custos de Produção e Abastecimento:** Ajustar a produção e compras para otimizar os custos globais.\n*   **Evitar Desperdícios no Lançamento de Novos Produtos:** Garantir visibilidade clara dos custos reais do projeto, evitando desperdícios.\n*   **Planejamento Otimizado:** Implementar uma metodologia padronizada e conceituada, como o cálculo EOQ (Economic Order Quantity), para um planejamento mais eficiente.\n\nAlém disso, a ata deve contemplar os seguintes pontos:\n\n*   **Teste de Aderência do Cálculo de Lote EOQ:** Verificar a precisão e adequação do cálculo do lote EOQ.\n*   **Análises de Impacto e Oportunidades:** Avaliar o impacto das mudanças nos lotes, identificando oportunidades de redução de custos.\n*   **Treinamentos:** Garantir que os colaboradores estejam capacitados para utilizar as novas metodologias e ferramentas.\n*   **Implementação e Atualização do Lote EOQ:** Ajustar a ferramenta manual, atualizar a demanda mensal e recalcular o lote EOQ.\n*   **Redução de EOQ + Quick Wins:** Implementar ações rápidas (quick wins) para otimizar os lotes.\n*   **Garantir Meta de Giro de Estoques em Lotes:** Utilizar ferramentas de desdobramento de metas, simulações e análises para otimizar o giro de estoque.\n*   **Trade-off com Fornecedores:** Realizar negociações estratégicas com fornecedores, buscando o melhor custo-benefício.\n\nÉ crucial que a ata contenha um painel de gestão de redução de lotes, visando atingir uma meta de 10% de redução nos lotes cadastrados, resultando em milhões de reais economizados.",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output significantly deviates from the expected output in terms of semantic meaning. The expected output focuses on logistical cost management and supplier negotiations, while the actual output provides a detailed agenda for an 'ata' (minutes) regarding inventory optimization, EOQ calculations, and supplier strategies – demonstrating a clear regression and failure to retain essential concepts.",
+      "duration_ms": 44233
+    },
+    {
+      "golden_id": "armaz_06_indicador_logistico",
+      "input": "Qual indicador acompanha custo logistico total em relacao ao valor comprado?",
+      "expected_output": "Custo logistico total dividido pelo valor comprado, calculado em janela rolling de 12 meses, por categoria.",
+      "actual_output": "O indicador que acompanha o custo logístico total em relação ao valor comprado é o **Custo de Armazenagem por Unidade** (ou Custo de Holding). Este indicador reflete a proporção do custo total de manter um item em estoque em relação ao seu valor de compra. A análise do Lote EOQ, conforme documentado, visa reduzir este custo através da otimização do tamanho dos lotes e, consequentemente, diminuir os níveis de estoque.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses 'Custo de Armazenagem por Unidade' (Holding Cost) and its relation to EOQ analysis, which is relevant but misses the key detail of calculating this based on a rolling 12-month window by category as specified in the expected output. While it retains some concepts, there’s a clear regression due to omitting the crucial timeframe and categorization requirement.",
+      "duration_ms": 21900
+    },
+    {
+      "golden_id": "armaz_07_gap_dwell_lote",
+      "input": "Como calcular o gap de dias de estoque atribuivel a politica de lote minimo do fornecedor?",
+      "expected_output": "Comparar dias de estoque medio com dias de estoque explicados pelo lote minimo; o gap representa o dwell atribuivel a politica do fornecedor.",
+      "actual_output": "Para calcular o gap de dias de estoque atribuível à política de lote mínimo do fornecedor, com base nos resultados apresentados, a ferramenta `arquivos_lotes` retornou o valor 3.  \n\nEste número provavelmente se refere ao tempo adicional de cobertura de estoque que resulta da aplicação do lote mínimo estabelecido pelo fornecedor.  É crucial analisar os dados adicionais relacionados ao projeto Lotes para entender completamente as implicações desse gap e identificar oportunidades de otimização, como a redução dos descartes de SKU's ou o ajuste do cálculo do Lote EOQ.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses the 'gap' of days of stock attributable to the supplier's minimum batch policy and suggests analyzing data related to 'Lotes'. However, it significantly deviates from the expected output which focuses on comparing average inventory days with those explained by the minimum lot size and explicitly states that gap represents dwell due to the supplier’s policy. The actual output introduces additional concepts (SKU reduction, EOQ calculation) not present in the expected output, indicating a decline in factual accuracy and a lack of adherence to the core concept.",
+      "duration_ms": 23884
+    },
+    {
+      "golden_id": "armaz_08_armazem_terceiros",
+      "input": "Que ocorrencia operacional deve ser monitorada quando picos de compra geram armazenagem externa?",
+      "expected_output": "Ocorrencias de armazenagem temporaria externa (terceiros) ligadas a picos de compra, pois sinalizam pressao sobre capacidade interna e custo logistico adicional.",
+      "actual_output": "A ocorrência operacional que deve ser monitorada quando picos de compra geram armazenagem externa é o cálculo do Lote Econômico (EOQ). Especificamente, a análise da redução de tamanho de lote e a implementação das \"Quick Wins\" relacionadas ao EOQ. O projeto visa reduzir o tamanho dos lotes em até R$ 13 milhões (7% do total), além de eliminar 1789 itens sem necessidade de produção ou compra nos últimos seis meses e otimizar o giro de estoques em lotes através de ferramentas como simulações, análises de redução de lotes e negociação com fornecedores.",
+      "score": 0.4,
+      "passed": false,
+      "reason": "The actual output discusses EOQ calculation, lot size reduction, and cost optimization, which are relevant to the situation described in the expected output. However, it includes additional details (R$13 million target, specific item numbers, simulation use) that were not present in the expected output, representing a slight deviation. The core concept of identifying pressure on capacity and logistics due to external storage is retained, but the expanded response introduces elements not explicitly requested.",
+      "duration_ms": 23818
+    },
+    {
+      "golden_id": "armaz_09_ocupacao_palete",
+      "input": "Como deve ser calculado o custo de ocupacao no modelo simplificado de armazenagem?",
+      "expected_output": "Aplicar metro quadrado ou palete-dia ao espaco adicional projetado pelo lote minimo, incluindo corredor e empilhamento na estimativa.",
+      "actual_output": "O custo de ocupação no modelo simplificado de armazenagem deve ser calculado considerando os seguintes fatores, conforme documentado em \"arquivos_lotes\":\n\n*   **Custos Fixos:** Incluem aluguel do espaço, energia elétrica, segurança e manutenção da área de armazenamento. Estes custos são independentes da quantidade de itens armazenados.\n*   **Custos Variáveis:** Representam o custo por unidade armazenada, como taxas de depreciação de equipamentos (paleteiras, empilhadeiras), seguros e custos administrativos associados ao estoque.\n\nA fórmula básica para calcular o custo de ocupação é:\n\n**Custo de Ocupação = Custos Fixos + (Custos Variáveis * Quantidade de Itens)**\n\nO cálculo do EOQ (Economic Order Quantity) pode ajudar a otimizar a quantidade de lotes, minimizando os custos totais de estoque, incluindo o custo de ocupação. A redução do tamanho dos lotes, conforme demonstrado no documento, pode gerar economias significativas, principalmente através da diminuição do capital empregado em estoques e da redução de descartes por vencimento. O potencial máximo de redução de tamanho de lote é de R$ 13 milhões (7% do total).",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output discusses fixed and variable storage costs, EOQ calculation, and potential cost savings, which are not present in the expected output. The expected output simply requests applying square meters or pallet-days to additional space, indicating a significant deviation in content and a clear regression from the reference material's detailed explanation of storage cost factors.",
+      "duration_ms": 31091
+    },
+    {
+      "golden_id": "armaz_10_manuseio_incremental",
+      "input": "O que compoe o manuseio incremental na estimativa de armazenagem extra?",
+      "expected_output": "Movimentacoes extras, conferencia ampliada e segregacao de lote, decorrentes de volumes ou lotes acima do padrao operacional.",
+      "actual_output": "O manuseio incremental na estimativa de armazenagem extra compõe-se das seguintes oportunidades:\n\n*   **Redução dos Descartes de SKU’s:** Diminuição do volume de produtos vencidos no grupo.\n*   **Redução do Custo com Capital Empregado em Estoques:** Otimização da gestão de estoque, reduzindo o capital investido.\n*   **Melhor Equilíbrio nos Custos:** Ajuste entre os custos globais de produção e abastecimento.\n*   **Prevenção de Desperdícios:** Melhor visibilidade dos custos reais em novos lançamentos de produtos.\n*   **Planejamento Otimizado:** Padronização e aplicação da metodologia EOQ (Economic Order Quantity).\n\nAlém disso, o documento aponta para iniciativas específicas como:\n\n*   Teste de aderência do cálculo EOQ.\n*   Análises de impacto e oportunidades.\n*   Treinamentos.\n*   Implementação e atualização do lote EOQ, com ajustes na ferramenta manual, atualização da demanda mensal e novos cálculos.\n*   Redução de lotes com potencial de economia de R$ 13 milhões (7% do total).\n*   Garantir meta de giro de estoques em lotes através de ferramentas de desdobramento de metas e simulações.",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output contains significantly different content from the expected output. While it discusses inventory management strategies like EOQ and cost reduction, these concepts are not present in the expected output. The expected output focuses on 'Movimentacoes extras, conferencia ampliada e segregacao de lote,' which represents a completely distinct operational process related to handling volumes or lots above standard operations. There is a clear regression from the reference material.",
+      "duration_ms": 33640
+    },
+    {
+      "golden_id": "armaz_11_servicos_especiais",
+      "input": "Cite exemplos de servicos especiais que entram no custo de armazenagem adicional.",
+      "expected_output": "Refrigeracao, controle de umidade e seguro ad valorem sobre estoque parado.",
+      "actual_output": "Com base nos dados fornecidos, os serviços especiais que entram no custo adicional de armazenagem incluem:\n\n*   **Teste de Aderência do Cálculo de Lote EOQ:** Realização de testes para garantir a precisão e confiabilidade dos cálculos do lote econômico (EOQ).\n*   **Análises de Impacto, Inconsistências e Oportunidades:** Avaliação detalhada das inconsistências nos processos e identificação de oportunidades de otimização.\n*   **Treinamentos:** Investimento em treinamento para garantir que a equipe compreenda e aplique corretamente as metodologias de gestão de lotes.\n*   **Implementação e Atualização do Lote Econômico (EOQ):** Processo contínuo de ajuste da ferramenta manual, atualização da demanda mensal e recalculo do lote EOQ.\n*   **Desenvolvimento de Usuário Chave:** Capacitação de um indivíduo para liderar e garantir a implementação das melhorias no processo.\n*   **Implementação das Reduções de EOQ + Quick Wins:** Adoção de medidas rápidas para reduzir o tamanho dos lotes, visando otimizar os custos.\n*   **Ferramentas de Desdobramento de Metas, Simulações e Análises de Redução de Lotes:** Utilização de ferramentas avançadas para planejar e executar a redução de lotes.\n*   **Análise de Dias de Cobertura (PA ́s e Insumos):** Avaliação do tempo necessário para cobrir a demanda com os materiais, utilizando o SAP APO.\n*   **Análise de Demanda Mensal Futura (PA ́s e Insumos):** Previsão da demanda futura dos materiais, também utilizando o SAP APO.\n*   **Trade Off de Custos vs Benefício com Fornecedores:** Avaliação do custo-benefício das negociações com fornecedores para otimizar a aquisição de insumos.\n*   **Painel de Gestão de Redução de 10% dos Lotes Cadastrados (R$ MM):** Monitoramento e controle da redução de lotes, visando atingir uma meta específica de economia.",
+      "score": 0.1,
+      "passed": false,
+      "reason": "The actual output contains a significantly different set of items compared to the expected output. The expected output focuses on refrigeration, humidity control, and ad valorem insurance for idle stock – concepts directly related to inventory management costs. The actual output lists numerous operational activities including EOQ calculations, training, and supplier negotiations, demonstrating a clear regression in alignment with the core concept presented in the expected output.",
+      "duration_ms": 43558
+    },
+    {
+      "golden_id": "armaz_12_limite_documento",
+      "input": "O documento de custo de armazenagem substitui a tabela oficial da controladoria?",
+      "expected_output": "Nao. O documento serve para alinhar linguagem entre compras, logistica e financeiro antes do fechamento de precos, mas nao substitui a tabela oficial de custos da controladoria.",
+      "actual_output": "Não, o documento de custo de armazenagem não substitui a tabela oficial da controladoria. O documento detalha oportunidades de redução de custos e otimização do dimensionamento do custo global de produção e abastecimento, incluindo a diminuição dos descartes de SKU’s para o grupo por vencimento e a redução do capital empregado em estoques. Contudo, a tabela oficial da controladoria permanece como referência principal para informações financeiras e controles internos.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output retains the core concept that the cost storage document doesn't replace the controller’s official table. However, it includes additional details (e.g., SKU reduction, capital employed in stocks) not present in the expected output. Furthermore, there is a slight shift in phrasing and an added explanation of the document's purpose, indicating a minor deviation from the concise expected response. The factual accuracy isn’t significantly diminished but represents a regression due to the expanded content.",
+      "duration_ms": 21677
+    },
+    {
+      "golden_id": "valid_01_objetivo_guia",
+      "input": "Qual e o objetivo do guia sobre prazo de validade e permanencia em estoque?",
+      "expected_output": "Orientar compras e analise de suprimentos na avaliacao de propostas em que lote minimo ou volume negociado impactam risco de obsolescencia, vencimento e capital empatado.",
+      "actual_output": "O guia sobre prazo de validade e permanência em estoque tem como objetivo principal otimizar a gestão de estoques, visando reduzir perdas e custos. Especificamente, busca-se:\n\n*   **Reduzir descartes de SKU’s:** Evitando o descarte de produtos devido ao vencimento.\n*   **Diminuir custo com capital empregado em estoque:** Otimizando a quantidade de itens armazenados.\n*   **Melhorar o equilíbrio entre custos de produção e abastecimento:** Ajustando as estratégias para uma melhor alocação de recursos.\n*   **Evitar desperdícios no lançamento de novos produtos:** Garantindo uma visão clara dos custos reais do projeto.\n*   **Planejamento otimizado:** Padronizando e aprimorando o processo de planejamento através da metodologia EOQ (Economic Order Quantity).\n\nO guia também contempla ações como o teste de aderência do cálculo de lote EOQ, análises de impacto, treinamentos e implementações para reduzir o tamanho dos lotes, garantindo um giro de estoque eficiente.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output focuses on inventory management optimization and cost reduction strategies related to EOQ, which is present in the expected output. However, it lacks the specific guidance regarding evaluating proposals based on minimum lot size or volume negotiated impacting obsolescence risk and capital tied up, a key element of the expected output. There's a clear decline in alignment with the core focus of assessing procurement risks as outlined in the expected response.",
+      "duration_ms": 28191
+    },
+    {
+      "golden_id": "valid_02_informacoes_fornecedor",
+      "input": "Que informacoes sobre validade devemos solicitar ao fornecedor na mesa de negociacao?",
+      "expected_output": "Data de fabricacao tipica, validade nominal do lote e politica de FEFO/FIFO na cadeia de suprimentos.",
+      "actual_output": "Na mesa de negociação, é crucial solicitar informações detalhadas sobre a validade dos produtos, abrangendo os seguintes aspectos:\n\n*   **Prazo de Validade:** Obter o prazo exato de validade do produto, expresso em dias ou meses, conforme a natureza do item.\n*   **Condições de Armazenamento:** Solicitar informações sobre as condições ideais de armazenamento (temperatura, umidade, luz) que garantam a manutenção da qualidade e validade do produto durante todo o período.\n*   **Procedimentos de Teste:** Verificar se o fornecedor possui procedimentos de teste regulares para monitorar a qualidade e validade dos produtos em estoque, incluindo os critérios de aceitação e rejeição.\n*   **Política de Produtos Vencidos:** Entender a política do fornecedor em relação a produtos que excedem o prazo de validade, como descontos, devoluções ou descarte adequado.\n\nEssas informações são fundamentais para otimizar o planejamento de compras e produção, minimizando perdas decorrentes de produtos vencidos e assegurando a qualidade dos produtos entregues.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output provides a detailed list of information points regarding product validity, including expiration dates, storage conditions, testing procedures, and expired product policies. However, it significantly deviates from the expected output's focus on 'data de fabricacao tipica, validade nominal do lote e politica de FEFO/FIFO', missing key concepts related to inventory management strategies. There is a clear regression in scope and content compared to the expected output.",
+      "duration_ms": 28659
+    },
+    {
+      "golden_id": "valid_03_clausula_vida_util",
+      "input": "Para insumos com validade curta, que clausula contratual e recomendada no recebimento?",
+      "expected_output": "Clausula de aceite de devolucao ou substituicao proporcional quando o recebimento ocorrer com menos de X% da vida util restante, parametro usualmente entre 70% e 85% por categoria.",
+      "actual_output": "No recebimento de insumos com validade curta, recomenda-se incluir a seguinte cláusula contratual:\n\n“O fornecedor se compromete a garantir que os produtos sejam entregues no local designado dentro do prazo estipulado, com a validade mínima de [definir período de validade – ex: 90 dias] a partir da data de emissão da nota fiscal. Caso a entrega ocorra após esse prazo, o fornecedor será responsável por quaisquer perdas ou danos decorrentes do vencimento dos produtos, sendo aplicável a política de controle de estoque e descarte estabelecida no projeto Lotes.”\n\nEssa cláusula visa mitigar riscos relacionados ao tempo de validade, assegurando que os insumos cheguem ao destino em condições adequadas para uso imediato.  A referência ao projeto Lotes reforça o controle e a gestão do ciclo de vida dos produtos.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output proposes a specific validity period (90 days) which is not present in the expected output's focus on percentage of remaining life utility (70-85%). While it addresses the issue of product validity, it deviates significantly from the expected approach. The response also includes additional details about 'Lotes' and responsibility for damages that are absent in the expected output, indicating a regression.",
+      "duration_ms": 25736
+    },
+    {
+      "golden_id": "valid_04_alertas_cadastro",
+      "input": "Quais alertas de validade devem constar no cadastro do item?",
+      "expected_output": "Vida util em dias, alerta amarelo (ex.: 120 dias antes do vencimento) e alerta vermelho (ex.: 60 dias), para acionar promocao interna ou ajuste de formula.",
+      "actual_output": "De acordo com a documentação do Projeto Lotes, os alertas de validade que devem constar no cadastro do item incluem:\n\n*   **Descartes de SKU’s para o Grupo por vencimento:** Identificação e monitoramento de itens próximos ao vencimento para evitar perdas.\n*   **Redução de custo com Capital Empregado em Estoques:** Otimização dos níveis de estoque para minimizar os custos associados à armazenagem.\n*   **Equilíbrio no dimensionamento do Custo Global de Produção e Abastecimento:** Ajustes que garantam a eficiência nos processos de produção e aquisição de materiais.\n*   **Evitar desperdícios no Lançamento de Novos Produtos:** Melhorar a visibilidade dos custos reais dos projetos, prevenindo desperdícios.\n*   **Planejamento otimizado:** Implementação de uma metodologia padronizada para o planejamento, com foco na absorção de melhores práticas pela empresa.\n\nAlém disso, a análise do cálculo do Lote EOQ (Economic Order Quantity) e as oportunidades de redução de lotes são cruciais para garantir a eficiência no gerenciamento de estoque.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output provides a list of concepts related to inventory management from the Project Lots documentation, including alerts for expiration, cost reduction, and balanced production. However, it lacks the specific details about 'life utility in days,' 'yellow/red alerts' (with example durations), and their connection to promotions or formula adjustments as outlined in the expected output. There is a clear regression in failing to include these key elements related to alert triggers and quantitative metrics.",
+      "duration_ms": 29453
+    },
+    {
+      "golden_id": "valid_05_classe_abc_giro",
+      "input": "Como a classe ABC influencia a meta de giro e permanencia em estoque?",
+      "expected_output": "Itens A devem permanecer o minimo possivel em estoque; itens C podem admitir estoque de seguranca maior, desde que nao haja risco regulatorio ou quimico.",
+      "actual_output": "A classificação ABC, aplicada aos itens de estoque, influencia diretamente a meta de giro e permanência em estoque através do dimensionamento dos lotes econômicos (EOQ).  De acordo com os documentos fornecidos, a aplicação da metodologia ABC permite:\n\n*   **Redução dos Descartes:** Ao focar nos itens \"A\" (maior valor), que representam uma parcela significativa do volume de estoque, é possível otimizar o dimensionamento dos lotes, minimizando perdas por obsolescência ou vencimento.\n*   **Otimização do Capital Empregado:**  Ao reduzir o tamanho dos lotes para os itens \"A\" e \"B\", diminui-se a necessidade de capital investido em estoque, impactando positivamente a meta de giro.\n*   **Melhor Equilíbrio nos Custos:** A análise ABC contribui para um planejamento mais eficiente, equilibrando custos de produção e abastecimento, o que se reflete na otimização da meta de giro.\n*   **Implementação do EOQ:**  A ferramenta EOQ é atualizada e ajustada com base na classificação ABC, permitindo um dimensionamento mais preciso dos lotes para cada categoria, visando a redução de custos e o aumento do giro.\n\nAdicionalmente, os documentos detalham ações rápidas (Quick Wins) focadas em reduzir lotes utilizando simulações e análises de demanda, buscando atingir uma meta de giro de 10% nos lotes cadastrados.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output contains several relevant concepts from the reference material, including the importance of prioritizing items 'A' and adjusting inventory levels based on ABC classification. However, it introduces new elements like ‘Quick Wins’ and a specific target of 10% for lot turnover, which are not present in the expected output. Furthermore, the expected output is significantly more concise and focuses solely on the core principle of minimizing A items while allowing greater buffer stock for C items, representing a clear regression from the detailed explanation provided in the actual output.",
+      "duration_ms": 33800
+    },
+    {
+      "golden_id": "valid_06_excesso_estrutural",
+      "input": "O que documentar quando o lote minimo implica cobertura superior a N meses de consumo?",
+      "expected_output": "Documentar o excesso estrutural e estimar custo de oportunidade aplicando taxa de capital sobre o valor do estoque extra.",
+      "actual_output": "Para documentar a situação em que o lote mínimo implica cobertura superior a N meses de consumo, é crucial detalhar os seguintes pontos, conforme as informações fornecidas:\n\n*   **Análise do EOQ:** Realizar um teste de aderência no cálculo do Lote Econômico (EOQ) para identificar inconsistências e oportunidades de otimização.\n*   **Impacto da Cobertura:** Avaliar o impacto dessa cobertura superior a N meses, considerando as oportunidades de redução de custos com capital empregado em estoques e o melhor equilíbrio entre custo global de produção e abastecimento.\n*   **Redução de Desperdícios:** Documentar como essa situação pode evitar desperdícios no lançamento de novos produtos, proporcionando maior visibilidade do custo real do projeto.\n*   **Planejamento Otimizado:** Detalhar a importância de um planejamento mais otimizado com metodologia padronizada e conceituada, absorvida pela empresa.\n*   **Ajustes na Ferramenta Manual:** Implementar ajustes na ferramenta manual para o cálculo do lote econômico, considerando atualizações mensais da demanda.\n*   **Redução de Lotes:** Utilizar ferramentas como “ranges” de roteiros atuais ou alternativos, análise de dias de cobertura (PA's e insumos) e análise de demanda mensal futura (PA’s e insumos).\n*   **Trade-off com Fornecedores:** Realizar um trade-off de custos versus benefício com fornecedores, buscando alternativas para reduzir os lotes cadastrados.\n\nÉ importante ressaltar que o potencial máximo de redução de tamanho de lote é de R$ 13 MM (7% do total), com uma economia de R$ 2,5MM no cálculo EOQ e a eliminação de 1789 itens sem produção ou compra nos últimos 6 meses.",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output significantly deviates from the expected output. While it lists several points related to inventory management (EOQ, waste reduction), it does not address the core instruction of documenting 'excess structural' and estimating opportunity cost with a capital rate. The response includes extraneous details about potential savings and item reductions that are not present in the expected output.",
+      "duration_ms": 36249
+    },
+    {
+      "golden_id": "valid_07_auditoria_desvio",
+      "input": "Quando um desvio de dwell time pos-compra deve gerar revisao de politica de lote?",
+      "expected_output": "Quando o dwell time medio pos-compra superar em mais de 20% a projecao feita na aprovacao da negociacao, deve-se revisar politica de lote ou buscar fornecedor alternativo.",
+      "actual_output": "Um desvio significativo no tempo de armazenamento pós-compra (dwell time) deve gerar uma revisão da política de lote, conforme detalhado nos documentos do Projeto Lotes. Especificamente, a análise do dwell time pode indicar ineficiências no dimensionamento dos lotes EOQ, levando a um excesso de estoque e, consequentemente, a potenciais perdas por obsolescência ou vencimento.\n\nA revisão da política de lote, nesse contexto, visa otimizar o tamanho dos lotes para garantir um giro de estoque eficiente e reduzir os custos associados ao armazenamento, conforme demonstrado nos resultados do cálculo EOQ (R$ 2,5MM de economia potencial) e nas estratégias propostas para redução de lotes (até 7% da totalidade). A análise de dwell time em conjunto com o cálculo EOQ permite identificar oportunidades de melhoria no dimensionamento dos lotes e evitar desperdícios.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses dwell time, EOQ calculations, and potential cost savings, which are relevant concepts. However, it significantly deviates from the expected output's focus on a threshold for reviewing lot policies (20% exceedance of projections) and seeking alternative suppliers. The response lacks the specific trigger condition outlined in the expected output, representing a clear regression in accuracy and scope.",
+      "duration_ms": 25997
+    },
+    {
+      "golden_id": "valid_08_checklist_validade_minima",
+      "input": "O que verificar no checklist rapido sobre validade minima garantida no recebimento?",
+      "expected_output": "Confirmar validade minima garantida no recebimento como item obrigatorio do checklist antes da reuniao ou fechamento com o fornecedor.",
+      "actual_output": "No recebimento, é necessário verificar os seguintes pontos no checklist rápido sobre a validade mínima garantida:\n\n*   **Conformidade com a Validade Minima Garantida:** Confirmar se o produto recebido possui a validade mínima garantida especificada na legislação e nos requisitos do cliente.\n*   **Condições de Armazenamento:** Avaliar se as condições de armazenamento (temperatura, umidade, etc.) foram adequadas para preservar a qualidade e validade do produto durante o transporte e armazenamento.\n*   **Documentação:** Verificar se toda a documentação relacionada à validade mínima garantida está presente e em ordem (certificados de análise, laudos técnicos, etc.).\n\nAlém disso, as oportunidades de ganhos mencionadas no documento incluem: redução dos descartes de SKU's para o Grupo por vencimento, redução do custo com capital empregado em estoques, melhor equilíbrio no dimensionamento do custo global de produção e abastecimento, evitar desperdícios no lançamento de novos produtos e planejamento mais otimizado através da metodologia padronizada EOQ.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output retains some of the key concepts – specifically regarding checking the minimum guaranteed validity – but significantly deviates in its phrasing and structure compared to the expected output. It includes extraneous information about potential gains and expands on the checklist items with unnecessary detail. There is a clear regression from the concise instruction in the expected output, though it doesn't completely miss the core requirement.",
+      "duration_ms": 27513
+    },
+    {
+      "golden_id": "valid_09_checklist_lote_unico",
+      "input": "Por que avaliar lote unico versus multiplos lotes na mesma entrega?",
+      "expected_output": "Multiplos lotes ou lote unico impactam rastreabilidade, FEFO/FIFO e risco de vencimento; deve-se alinhar formato de entrega com curva de consumo e politica de validade.",
+      "actual_output": "A avaliação de lotes únicos versus múltiplos na mesma entrega visa otimizar diversos aspectos, conforme detalhado nos materiais fornecidos. As principais justificativas para considerar a abordagem de múltiplos lotes são:\n\n*   **Redução de Desperdícios:** Minimiza o risco de obsolescência por vencimento (SKUs), um dos principais fatores de desperdício.\n*   **Otimização de Custos:** Reduz o capital empregado em estoque e busca um equilíbrio entre os custos globais de produção e abastecimento.\n*   **Melhor Visibilidade de Custos:** Evita desperdícios no lançamento de novos produtos, fornecendo uma visão mais precisa dos custos do projeto.\n*   **Planejamento Otimizado:** Padroniza o planejamento através da metodologia EOQ (Economic Order Quantity), facilitando a gestão e visibilidade.\n\nAlém disso, a implementação de lotes menores, como demonstrado no projeto \"Cozinha\" e nas iniciativas de redução de lote, busca atingir metas de giro de estoque, utilizando ferramentas de simulação e análise de demanda para identificar oportunidades de otimização e negociação com fornecedores. O objetivo final é reduzir custos e maximizar o retorno sobre o capital investido em estoque.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses waste reduction, cost optimization, visibility of costs, and EOQ planning, which are relevant concepts. However, it lacks the key elements from the expected output regarding traceability, FEFO/FIFO, and aligning delivery formats with consumption curves and expiry policies. There's a noticeable decline in accuracy compared to the concise expected response, focusing on practical implementation aspects rather than core strategic considerations.",
+      "duration_ms": 28209
+    },
+    {
+      "golden_id": "valid_10_fracionamento_consignacao",
+      "input": "Quais alternativas negociar para SKU de baixo giro com risco de obsolescencia?",
+      "expected_output": "Possibilidade de fracionamento ou consignacao para SKU de baixo giro, reduzindo capital empatado e risco de vencimento.",
+      "actual_output": "Considerando as informações fornecidas, as seguintes alternativas podem ser negociadas para SKU’s de baixo giro com risco de obsolescência:\n\n**Oportunidades de Redução de Custos:**\n\n*   **Redução de Desperdícios:** Negociar a redução do descarte de SKU’s devido ao vencimento.\n*   **Otimização do Capital Empregado em Estoques:** Ajustar os níveis de estoque, buscando diminuir o capital investido nesses produtos.\n*   **Equilíbrio de Custos:**  Buscar um melhor equilíbrio entre os custos globais de produção e abastecimento, otimizando a alocação de recursos.\n\n**Oportunidades de Melhoria no Processo:**\n\n*   **Implementação do Cálculo EOQ:** Ajustar a ferramenta manual e atualizar as demandas mensais para garantir a precisão do cálculo do lote econômico (EOQ). Desenvolver usuários-chave para essa tarefa.\n*   **Redução de Lotes:** Utilizar “ranges” de roteiros atuais ou alternativos, análise de dias de cobertura, análise de demanda futura e desdobramento de alternativas com fornecedores, buscando reduzir o tamanho dos lotes. Implementar um cockpit de simulação de lote.\n*   **Meta de Giro de Estoques:** Estabelecer metas de giro de estoque em lotes, utilizando ferramentas de simulação e análises para identificar oportunidades de redução de lotes.\n\n**Ações Estratégicas:**\n\n*   **Trade-off com Fornecedores:** Realizar um trade-off entre custos e benefícios ao negociar com fornecedores, buscando melhores preços e condições.\n*   **Restrições Técnicas:** Buscar viabilizar reduções de lote considerando restrições técnicas existentes.\n\nÉ importante ressaltar que a implementação do projeto \"Cozinha\" pode gerar oportunidades adicionais de redução de lotes, dependendo da análise específica das restrições técnicas.",
+      "score": 0.4,
+      "passed": false,
+      "reason": "The actual output discusses several cost reduction opportunities like EOQ calculation, lot size reduction, and supplier negotiations, retaining key concepts from the reference material. However, it lacks the specific suggestion of 'fractionamento ou consignação' for low-turnover SKUs, which is a core element of the expected output and represents a clear regression in addressing the primary risk mitigation strategy.",
+      "duration_ms": 37688
+    },
+    {
+      "golden_id": "valid_11_alerta_vencimento",
+      "input": "Que compromisso pedir ao fornecedor sobre lotes proximos ao vencimento?",
+      "expected_output": "Compromisso de alerta antecipado quando houver lote proximo ao vencimento, permitindo acao preventiva de compras e qualidade.",
+      "actual_output": "Com base nos documentos fornecidos, o compromisso a ser solicitado ao fornecedor sobre lotes próximos ao vencimento é:\n\n**Reduzir o tamanho dos lotes para minimizar os descartes de SKU’s e reduzir o custo com capital empregado em estoques.** O projeto EOQ tem potencial para reduzir o tamanho dos lotes em até R$ 13 milhões (7% do total), além de evitar desperdícios no lançamento de novos produtos.  É crucial garantir um giro de estoque eficiente através da análise de demanda, simulações e negociações com fornecedores, buscando alternativas de roteiros e otimizando o trade-off entre custos e benefícios.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output contains relevant concepts like minimizing SKU waste and reducing capital costs, but it significantly deviates from the expected output's focus on proactive alerts for near-expiry lots. While the actual output mentions analysis of demand and negotiations with suppliers, it lacks the core concept of 'alerta antecipado' (early warning) and the specific action of 'acao preventiva de compras e qualidade' (preventive purchasing and quality actions). There is a clear regression in meaning and scope compared to the expected outcome.",
+      "duration_ms": 24008
+    },
+    {
+      "golden_id": "valid_12_fefo_fifo",
+      "input": "O que significa exigir politica FEFO/FIFO do fornecedor?",
+      "expected_output": "FEFO (First Expired, First Out) prioriza saida pelo vencimento mais proximo; FIFO (First In, First Out) prioriza ordem de entrada. Ambas reduzem risco de obsolescencia e devem ser explicitadas na cadeia.",
+      "actual_output": "A política FEFO/FIFO (First Expired, First In) para fornecedores significa que o fornecedor deve entregar os itens do lote com a data de validade mais antiga primeiro. Isso visa minimizar perdas devido ao vencimento dos produtos, reduzindo custos de armazenagem e garantindo que os itens mais frescos sejam utilizados ou revendidos primeiro. Essa abordagem contribui diretamente para a redução dos descartes de SKU’s (Stock Keeping Units) e otimiza o capital empregado em estoque, conforme documentado no projeto Lotes.",
+      "score": 0.4,
+      "passed": false,
+      "reason": "The actual output partially aligns with the expected output by explaining the FEFO/FIFO policy for suppliers, including its goal of minimizing losses and optimizing inventory. However, it misses key aspects like explicitly contrasting FEFO and FIFO prioritization as stated in the expected output, and doesn't mention the need to explicitly state these approaches within the supply chain. There is a slight decline in accuracy due to omitting critical distinctions between the methods.",
+      "duration_ms": 20314
+    },
+    {
+      "golden_id": "neg_01_integracao_temas",
+      "input": "Como combinar argumentos de armazenagem e validade na mesma contraproposta a um fornecedor?",
+      "expected_output": "Estimar delta de armazenagem do lote minimo elevado em paralelo ao risco de obsolescencia e custo de oportunidade do excesso de cobertura, apresentando impacto financeiro integrado para justificar desconto, fracionamento ou clausulas de validade minima.",
+      "actual_output": "Para combinar argumentos de armazenagem e validade na mesma contraproposta a um fornecedor, considerando as informações apresentadas, propõe-se o seguinte:\n\n**1. Cálculo EOQ Refinado:** Utilizar a ferramenta EOQ (Economic Order Quantity) para determinar o tamanho ideal do lote, levando em conta tanto o custo de armazenagem quanto o prazo de validade dos produtos. A atualização mensal da demanda e o novo cálculo do EOQ podem reduzir significativamente os descartes por vencimento e otimizar o capital empregado em estoque.\n\n**2. Redução de Lotes:** Implementar a redução de lotes, utilizando \"ranges\" de roteiros atuais ou alternativos (PA’s), analisando os dias de cobertura (PA’s e insumos) e a demanda futura (SAP APO). Essa estratégia visa diminuir o tamanho dos lotes, impactando positivamente tanto na validade quanto no custo de armazenagem.\n\n**3. Trade-off de Custos vs. Benefícios:** Realizar um \"trade-off\" entre os custos e benefícios da redução de lotes com os fornecedores, buscando alternativas que minimizem o impacto na qualidade e na validade dos produtos, ao mesmo tempo em que reduzem os custos de produção e abastecimento.\n\n**4. Cockpit de Simulação de Lote:** Utilizar um cockpit de simulação para avaliar diferentes cenários de redução de lotes, permitindo uma análise mais precisa do impacto na validade, no custo de armazenagem e no giro de estoque.\n\nA implementação dessas medidas, conforme o projeto \"Lotes\", pode gerar reduções significativas nos descartes de SKU’s (Stock Keeping Units) devido ao vencimento dos produtos, além de otimizar o capital empregado em estoques.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output presents a detailed plan with specific recommendations (EOQ refinement, lot reduction, cost-benefit analysis, simulation cockpit) which partially addresses the expected output's request for estimating storage delta and considering risk/opportunity costs. However, it lacks the crucial element of presenting an integrated financial impact to justify decisions like discounts or minimum validity clauses, demonstrating a clear regression in scope compared to the expectation.",
+      "duration_ms": 36069
+    },
+    {
+      "golden_id": "neg_02_publico_documentos",
+      "input": "Quem sao os publicos-alvo dos documentos internos de negociacao de compras?",
+      "expected_output": "Compradores, analistas financeiros e analistas de suprimentos envolvidos em negociacoes, recomposicao de precos e avaliacao de propostas.",
+      "actual_output": "De acordo com os documentos, os públicos-alvo dos documentos internos de negociação de compras são:\n\n*   Planejadores\n*   Fábricas\n*   Equipe responsável pelo cálculo do Lote EOQ\n*   Fornecedores (em relação a trade-offs de custos e benefícios)\n*   Gestores envolvidos na redução de lotes.",
+      "score": 0.6,
+      "passed": false,
+      "reason": "The actual output captures several key concepts from the expected output (Compradores, analistas financeiros e analistas de suprimentos), but misses others like 'recomposicao de precos' and 'avaliacao de propostas'. While it lists relevant roles ('Planejadores', 'Fábricas', etc.), the overall semantic meaning isn’t fully aligned with the more specific target audience described in the expected output. There is a slight decline in accuracy due to omitting some crucial elements related to negotiation strategies.",
+      "duration_ms": 20230
+    },
+    {
+      "golden_id": "neg_03_risco_obsolescencia_provisao",
+      "input": "Quando aplicar provisao de risco de obsolescencia no modelo de armazenagem?",
+      "expected_output": "Quando o estoque projetado ultrapassa a cobertura alvo em meses, aplicando percentual de provisao sugerido pela analise de risco.",
+      "actual_output": "A provisão de risco de obsolescência deve ser aplicada no modelo de armazenagem quando há incerteza sobre a demanda futura por um determinado item, especialmente considerando o prazo de validade (shelf life).  De acordo com os documentos fornecidos, essa provisão visa reduzir descartes de SKU’s para o Grupo por vencimento e otimizar o dimensionamento do custo global de produção e abastecimento.\n\nEspecificamente, a aplicação da provisão se justifica nos seguintes cenários:\n\n*   **Produtos com Curto Prazo de Validade:**  Itens que possuem um prazo de validade curto exigem uma avaliação mais cuidadosa da demanda para evitar perdas por obsolescência.\n*   **Incerteza na Demanda:** Quando a previsão de demanda para um item é incerta, a provisão serve como uma margem de segurança para garantir que o estoque não se torne obsoleto antes de ser utilizado ou vendido.\n\nOs documentos indicam que a implementação do Lote EOQ (Economic Order Quantity) e as análises de impacto podem ajudar a identificar e mitigar esses riscos, buscando reduções de até 7% no tamanho dos lotes. Além disso, o uso de ferramentas como simulações e análises de redução de lotes auxiliam na gestão do giro de estoque, minimizando perdas por obsolescência.",
+      "score": 0.6,
+      "passed": false,
+      "reason": "The actual output largely aligns with the expected output in describing the need for a provision to address obsolescence risk based on short shelf life and demand uncertainty. However, it includes extraneous details about EOQ, lot size reductions, simulations, and percentage reduction targets (7%) which are not present in the expected output. While the core concept is retained, the inclusion of these additional elements represents a minor decline in focus and accuracy compared to the succinctness of the expected response.",
+      "duration_ms": 31240
+    },
+    {
+      "golden_id": "neg_04_entrega_antecipada",
+      "input": "Que situacao operacional justifica custo de armazenagem extra alem do lote minimo?",
+      "expected_output": "Entregas antecipadas e necessidade de armazem climatizado, alem de lotes minimos elevados, justificam estimativa de armazenagem adicional.",
+      "actual_output": "A situação operacional que justifica um custo de armazenagem adicional além do lote mínimo reside na necessidade de otimizar o dimensionamento do Custo Global de Produção e Abastecimento, conforme detalhado nos resultados da ferramenta `arquivos_lotes`. Especificamente, a redução dos descartes de SKU’s para o Grupo por vencimento e a diminuição do capital empregado em estoques são fatores que demandam um controle mais rigoroso do estoque, implicando em custos de armazenagem elevados.\n\nAlém disso, a implementação de ajustes no Lote Econômico (EOQ) e o desdobramento de metas de giro de estoques, visando uma redução de 10% nos lotes cadastrados, demonstram a importância de um planejamento mais otimizado e padronizado para minimizar perdas e custos associados ao armazenamento.",
+      "score": 0.6,
+      "passed": false,
+      "reason": "The actual output retains the core concept of justifying additional storage costs due to factors like EOQ adjustments and SKU reduction targets. However, it includes more detailed explanations about optimizing production costs and waste reduction compared to the expected output's concise statement regarding expedited deliveries and a climatized warehouse. There is a slight decline in accuracy as the actual output provides significantly more context than the expected output, moving beyond the core justification.",
+      "duration_ms": 25313
+    },
+    {
+      "golden_id": "neg_05_custo_oportunidade",
+      "input": "Como estimar custo de oportunidade do estoque extra causado por lote minimo?",
+      "expected_output": "Documentar excesso estrutural de cobertura e multiplicar o valor do estoque extra pela taxa de capital aplicada, obtendo custo de oportunidade financeiro.",
+      "actual_output": "O custo de oportunidade do estoque extra causado por um lote mínimo pode ser estimado analisando os seguintes pontos, conforme a documentação fornecida:\n\n**Oportunidades de Redução de Custos:**\n\n*   **Redução dos Descartes:** Diminuição das perdas devido ao vencimento de produtos.\n*   **Redução do Custo com Capital Empregado em Estoques:** Otimização do capital investido em estoque, resultando em economia.\n*   **Melhor Equilíbrio nos Custos:** Ajuste no equilíbrio entre os custos de produção e abastecimento.\n*   **Evitar Desperdícios:** Melhoria no lançamento de novos produtos, com maior visibilidade dos custos reais do projeto.\n*   **Planejamento Otimizado:** Padronização e otimização do planejamento através da metodologia EOQ.\n\n**Potencial de Redução de Lotes:**\n\n*   O potencial máximo de redução do tamanho dos lotes é de R$ 13 milhões, representando uma redução de 7% no custo total.\n\n**Considerações Adicionais:**\n\n*   A implementação do cálculo EOQ pode gerar economias de R$ 2,5 milhões e evitar a produção/compra de 1789 itens nos últimos seis meses.\n*   O projeto \"Cozinha\" visa viabilizar reduções de lotes com restrições técnicas.\n\nEm resumo, o custo de oportunidade é representado pela perda das oportunidades de redução de custos mencionadas acima, que poderiam ser alcançadas com um dimensionamento mais eficiente dos lotes, utilizando a metodologia EOQ e as ferramentas de análise propostas.",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output discusses cost reduction opportunities related to EOQ and inventory management, but it fails to address the core instruction of calculating a financial opportunity cost by multiplying excess coverage and applying the capital rate. The response includes relevant concepts from the reference material (EOQ, inventory reduction), but lacks the specific calculation requested in the expected output.",
+      "duration_ms": 33531
+    },
+    {
+      "golden_id": "neg_06_parametro_vida_util",
+      "input": "Qual faixa percentual de vida util restante e usual para aceite de recebimento de insumos sensiveis?",
+      "expected_output": "Parametro a definir por categoria, usualmente entre 70% e 85% da vida util restante no recebimento.",
+      "actual_output": "Considerando o documento fornecido, a faixa percentual usual de vida útil restante para aceitação de insumos sensíveis geralmente se situa em torno de 6 meses. Este período é frequentemente utilizado para otimizar o dimensionamento dos lotes EOQ e reduzir custos relacionados ao capital empregado em estoque, além de evitar desperdícios no lançamento de novos produtos. A implementação de ferramentas como o cálculo do lote EOQ e a análise de redução de lotes visam garantir um giro de estoque eficiente, com foco na minimização de perdas devido ao vencimento dos insumos.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses a time period (6 months) for accepting sensitive inputs and optimizing lot sizing, which is related to the concept of remaining life. However, it deviates significantly from the expected output's focus on a percentage range (70-85%) of remaining useful life. While some concepts are present, the factual accuracy declines due to the shift in terminology and specific numerical values, indicating a clear regression.",
+      "duration_ms": 21838
+    },
+    {
+      "golden_id": "neg_07_alerta_amarelo_vermelho",
+      "input": "Qual a finalidade dos alertas amarelo e vermelho de validade no cadastro?",
+      "expected_output": "Antecipar acoes de promocao interna, ajuste de formula ou negociacao com fornecedor antes do vencimento, com limiares exemplificativos de 120 e 60 dias.",
+      "actual_output": "Os alertas amarelo e vermelho de validade no cadastro, conforme documentado em \"Arquivos Lotes\", têm como finalidade principal alertar sobre o risco de perdas decorrentes do vencimento de produtos. Especificamente:\n\n*   **Verde:** Indica que o produto está dentro da sua vida útil, sem riscos significativos.\n*   **Amarelo:** Sinaliza que a validade do produto está próxima e requer atenção para evitar perdas, com ações como promoções ou ajustes no planejamento.\n*   **Vermelho:** Representa um risco crítico de perda devido ao vencimento iminente, exigindo medidas emergenciais para minimizar o impacto, como liquidação de estoque.\n\nO sistema busca otimizar a gestão de estoques, reduzindo descartes e custos associados ao vencimento de produtos, além de garantir o equilíbrio entre produção, abastecimento e visibilidade dos custos do projeto.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses the color-coded alerts (green, yellow, red) and their corresponding meanings regarding product validity risks. However, it lacks the specific numerical thresholds (120 and 60 days) mentioned in the expected output, representing a significant deviation in detail and practical application. While some concepts are present, the absence of these key metrics results in a low score.",
+      "duration_ms": 25112
+    },
+    {
+      "golden_id": "neg_08_valores_exemplificativos",
+      "input": "Os limiares numericos dos guias internos sao obrigatorios para todas as unidades?",
+      "expected_output": "Nao necessariamente. Valores numericos sao exemplificativos; cada unidade de negocio deve alinhar limiares com qualidade, regulacao e capacidade de armazenagem.",
+      "actual_output": "Os limiares numéricos definidos nos guias internos não são aplicados de forma universal a todas as unidades. A documentação indica que o cálculo do lote EOQ envolve análises específicas, como ajustes na ferramenta manual, atualização da demanda mensal e novo cálculo do lote EOQ, visando reduzir o tamanho dos lotes e otimizar os custos.  O potencial máximo de redução do tamanho dos lotes é de R$ 13 milhões (7% do total).",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output retains some of the concepts from the expected output (e.g., referencing guides and unit-specific alignment), but significantly deviates in its detailed explanation of EOQ calculations and cost reduction potential. The inclusion of a specific monetary value (R$ 13 million) and percentage (7%) is not present in the expected output, introducing factual inaccuracies. While it touches on relevant aspects, the overall semantic meaning differs substantially, indicating a clear regression from the expected response.",
+      "duration_ms": 20932
+    },
+    {
+      "golden_id": "neg_09_segregacao_lote",
+      "input": "Por que a segregacao de lote aumenta custo de manuseio na armazenagem extra?",
+      "expected_output": "Segregar lotes exige movimentacoes e conferencias adicionais para manter rastreabilidade e FEFO/FIFO, elevando manuseio incremental.",
+      "actual_output": "A segregação de lote aumenta o custo de manuseio na armazenagem extra devido à necessidade de separar e controlar itens distintos em cada lote. Isso implica em mais movimentações, contagens, verificações e potencialmente em perdas por divergências entre os lotes, elevando os custos operacionais associados ao armazenamento e gerenciamento do estoque.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output captures the core concept of increased handling costs due to lot segregation, but it significantly deviates from the expected output's concise phrasing and inclusion of FEFO/FIFO. While related, the actual output provides a more verbose explanation that lacks the key elements of traceability and inventory management principles present in the expected response. There is a clear regression in terms of conciseness and specific terminology.",
+      "duration_ms": 18908
+    },
+    {
+      "golden_id": "neg_10_seguro_ad_valorem",
+      "input": "Em que situacao considerar seguro ad valorem no custo de armazenagem?",
+      "expected_output": "Sobre estoque parado ou de giro lento, como servico especial do modelo de armazenagem, refletindo risco financeiro do capital immobilizado.",
+      "actual_output": "Considerar o custo de armazenagem como *ad valorem* (em percentual) é seguro quando a redução do tamanho dos lotes, conforme calculado pelo modelo EOQ, resulta em uma economia significativa no estoque. Especificamente, a oportunidade de reduzir os descartes de SKU’s para o Grupo por vencimento e diminuir o custo com capital empregado em estoques, com um potencial máximo de redução de R$ 13 milhões (7% do total), justifica essa abordagem. O projeto EOQ visa otimizar o dimensionamento dos custos de produção e abastecimento, evitando desperdícios no lançamento de novos produtos e promovendo um planejamento mais eficiente.",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output discusses EOQ optimization and cost reduction, which is not present in the expected output. While it touches on inventory management, it significantly deviates from the core concept of 'paralyzed stock' or slow-moving inventory as a financial risk, as stated in the expected output. There’s no evidence of regression; instead, there's a complete semantic shift.",
+      "duration_ms": 21824
+    },
+    {
+      "golden_id": "neg_11_cross_docking",
+      "input": "Por que registrar responsabilidade de cross-docking na ata de negociacao?",
+      "expected_output": "Evitar disputa posterior sobre quem absorve custo logistico de transferencia rapida entre transporte e armazenagem ou expedicao.",
+      "actual_output": "Registrar a responsabilidade de cross-docking na ata de negociação é crucial para garantir a otimização do fluxo de materiais e reduzir o tempo de armazenamento. De acordo com os documentos disponíveis, a implementação do Lote EOQ visa reduzir descartes de SKU’s, custos de capital empregado em estoques e melhorar o equilíbrio entre produção e abastecimento.\n\nEspecificamente, o cross-docking é um elemento chave nas \"Quick Wins\" propostas para garantir meta de giro de estoque em lotes. As ferramentas incluem análise de dias de cobertura, simulações e análises de redução de lotes, visando diminuir os lotes cadastrados (R$ MM) e otimizar o dimensionamento do custo global de produção e abastecimento. A utilização de \"ranges\" de roteiros atuais ou alternativos, análise de demanda futura e negociação com fornecedores são estratégias complementares para alcançar esses objetivos.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output discusses cross-docking, EOQ implementation, SKU reduction, and strategic approaches to inventory management, which partially addresses the expected output's focus on avoiding logistical disputes. However, it significantly deviates from the concise statement about preventing disputes regarding fast transport logistics. The response includes numerous details and concepts not present in the expected output, indicating a clear regression and a lack of alignment with the core intent.",
+      "duration_ms": 26085
+    },
+    {
+      "golden_id": "neg_12_embalagens_retornaveis",
+      "input": "O que negociar sobre embalagens retornaveis em contratos de suprimento?",
+      "expected_output": "Definir em ata quem assume custo de devolucao de embalagens retornaveis, impactando custo logistico total e condicoes de entrega.",
+      "actual_output": "Negociar sobre embalagens retornáveis em contratos de suprimento envolve diversas oportunidades de ganhos, conforme detalhado nos documentos. Os pontos principais a serem considerados são:\n\n*   **Redução de Desperdícios:** Diminuição do descarte de SKU’s (Stock Keeping Units) devido ao vencimento dos produtos.\n*   **Otimização de Custos:** Redução dos custos com o capital empregado em estoques.\n*   **Equilíbrio de Custos:** Busca por um melhor equilíbrio entre os custos globais de produção e abastecimento.\n*   **Visibilidade de Custos:** Evitar desperdícios no lançamento de novos produtos, garantindo uma melhor visibilidade do custo real dos projetos.\n*   **Planejamento Otimizado:** Implementação de um planejamento mais otimizado através da padronização e conceituação da metodologia.\n\nAlém disso, é crucial o teste de aderência do cálculo EOQ (Economic Order Quantity), análises de impacto e oportunidades, treinamentos e a implementação de ajustes na ferramenta manual, atualizações de demanda mensal e novos cálculos de lote EOQ.  A meta de giro de estoques em lotes deve ser garantida através de ferramentas de desdobramento de metas, simulações e análises de redução de lotes, utilizando “ranges” de roteiros atuais ou alternativos, análise de dias de cobertura, análise de demanda mensal futura e a utilização de boas práticas entre planejadores e fábricas.  O trade-off de custos versus benefícios com fornecedores também é fundamental. O objetivo final é reduzir os lotes cadastrados em 10% (R$ MM).",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output significantly deviates from the expected output in terms of semantic meaning. While the actual output discusses aspects like EOQ calculations, inventory turnover, and cost reduction strategies, the expected output focuses solely on defining responsibility for returnable packaging costs within an agreement. The actual output contains numerous concepts not present in the reference material, indicating a clear regression and a lack of alignment with the core requirement.",
+      "duration_ms": 35004
+    },
+    {
+      "golden_id": "edge_01_fora_escopo",
+      "input": "Qual a receita de bolo de chocolate recomendada para eventos corporativos?",
+      "expected_output": "Este assistente trata de negociacao de compras, armazenagem, validade e suprimentos. Nao possuo base para receitas culinarias; reformule a pergunta no contexto de procurement.",
+      "actual_output": "Com base nos documentos fornecidos, não há uma receita específica para bolo de chocolate recomendada para eventos corporativos. No entanto, o documento detalha estratégias e análises relacionadas ao cálculo do lote econômico (EOQ), otimização de estoques e redução de custos em diversos projetos, incluindo a gestão de ingredientes e produtos.\n\nAs ações propostas visam reduzir desperdícios, otimizar o dimensionamento dos custos de produção e abastecimento, e garantir um giro eficiente de estoque.  O projeto \"Cozinha\" busca viabilizar reduções de lote com restrições técnicas, utilizando ferramentas como simulações e análises de demanda para determinar os tamanhos ideais de lote.\n\nRecomenda-se consultar a ferramenta `arquivos_lotes` com o termo \"receita bolo chocolate eventos corporativos\" para obter informações mais específicas sobre receitas e padrões adequados para esse tipo de evento, caso existam documentos relacionados.",
+      "score": 0.1,
+      "passed": false,
+      "reason": "The actual output demonstrates a strong alignment with the expected output in terms of retaining core concepts. It correctly identifies that there's no specific chocolate cake recipe and focuses on related cost optimization strategies like EOQ and inventory management. While it suggests consulting a tool, this aligns with the expectation to reframe the query within procurement.",
+      "duration_ms": 26726
+    },
+    {
+      "golden_id": "edge_02_sem_dado_numerico",
+      "input": "Qual o valor exato em reais do palete-dia na nossa tabela de controladoria?",
+      "expected_output": "O documento interno nao substitui a tabela oficial da controladoria e nao fixa valores monetarios de palete-dia; consulte a controladoria ou parametros financeiros oficiais da empresa.",
+      "actual_output": "O valor exato do palete-dia na tabela de controladoria é de R$ 3,00. Além disso, a análise detalhada identifica oportunidades para redução de custos com capital empregado em estoques, visando um potencial máximo de redução de tamanho de lote de R$ 13 milhões (7% do total).",
+      "score": 0.2,
+      "passed": false,
+      "reason": "The actual output contains factual information (R$ 3.00) which is not present in the expected output. While it mentions cost reduction opportunities, it deviates significantly from the expected guidance of directing users to official sources and explicitly stating that monetary values for 'palete-dia' are not fixed. There’s a clear regression in terms of adhering to the expected instruction regarding referencing official documentation.",
+      "duration_ms": 19455
+    },
+    {
+      "golden_id": "edge_03_resumo_executivo",
+      "input": "Resuma em tres topicos o que um comprador deve levar para reuniao sobre lote minimo elevado.",
+      "expected_output": "1) Delta de armazenagem (ocupacao, manuseio, servicos especiais e risco de obsolescencia) em R$/unidade ou R$/mes. 2) Impacto de validade e dwell time, incluindo clausulas de vida util e fracionamento. 3) Itens de ata: cross-docking, embalagens retornaveis e demurrage, se aplicavel.",
+      "actual_output": "Com base nos materiais fornecidos, o comprador deve levar para a reunião sobre o aumento do lote mínimo os seguintes pontos:\n\n**1. Oportunidades de Melhoria Financeira:**\n\n*   **Redução de Desperdícios:** Diminuição dos produtos vencidos (SKUs) devido ao controle mais rigoroso dos lotes.\n*   **Otimização do Capital Empregado:** Redução dos custos associados ao capital investido em estoque.\n*   **Equilíbrio de Custos:** Melhor alinhamento entre os custos globais de produção e abastecimento.\n\n**2. Implementação Estratégica do EOQ (Economic Order Quantity):**\n\n*   **Revisão e Atualização:** Ajustes na ferramenta manual, atualização da demanda mensal e recalculo do lote EOQ.\n*   **Desenvolvimento de Usuários Chave:** Capacitação para o uso adequado da metodologia.\n*   **Implementação em Fases:** Execução das reduções de EOQ com “quick wins” em duas rodadas (1º e 2º semestre).\n\n**3. Otimização do Giro de Estoques e Gestão de Fornecedores:**\n\n*   **Garantia do Giro de Estoques:** Atingimento da meta de giro de estoques através de ferramentas de desdobramento, simulações e análises de redução de lotes.\n*   **Estratégias de Lote:** Utilização de “ranges” de roteiros atuais ou alternativos, análise de dias de cobertura (PA’s e insumos), previsão da demanda futura e negociação com fornecedores para otimizar o trade-off entre custos e benefícios.\n*   **Cockpit de Simulação:** Implementação de um painel de simulação de lote para auxiliar na tomada de decisões.",
+      "score": 0.3,
+      "passed": false,
+      "reason": "The actual output provides a detailed discussion of financial improvements, EOQ implementation, and inventory optimization strategies, retaining many concepts from the reference material. However, it significantly deviates from the expected output by omitting specific quantitative metrics (Delta de armazenagem in R$/unidade or R$/mes) and key elements like validity analysis, dwell time considerations, and items from the meeting agenda (cross-docking, etc.). This represents a clear regression in scope and detail compared to the expected outcome.",
+      "duration_ms": 37393
+    },
+    {
+      "golden_id": "edge_04_comparacao_fefo_fifo",
+      "input": "Em insumo quimico com validade critica, FEFO ou FIFO deve prevalecer?",
+      "expected_output": "Para validade critica, FEFO costuma prevalecer por priorizar o vencimento mais proximo; confirme com qualidade e regulacao da categoria e explicite a politica exigida ao fornecedor.",
+      "actual_output": "Considerando o documento fornecido, em insumos químicos com validade crítica, o método FEFO (First Expired, First Out – Primeiro a Expirar, Primeiro a Sair) deve prevalecer. Isso se justifica pela necessidade de minimizar perdas devido ao tempo de vida útil dos produtos. O FIFO (First In, First Out – Primeiro a Entrar, Primeiro a Sair) não é adequado para produtos com validade crítica, pois pode levar ao descarte de itens ainda utilizáveis após o vencimento, gerando prejuízos significativos.\n\nO documento detalha iniciativas como otimização do cálculo EOQ (Economic Order Quantity), redução de lotes e melhoria do giro de estoque, visando à redução de custos e desperdícios.",
+      "score": 0.4,
+      "passed": false,
+      "reason": "The actual output largely captures the core concepts of prioritizing FEFO for products with critical expiration dates due to minimizing losses. However, it includes additional details about EOQ optimization and inventory turnover reduction that are not present in the expected output. There's a slight decline in accuracy as the actual output expands on aspects beyond the succinct guidance provided in the reference material. The response retains the fundamental principle of FEFO but lacks the directness and specific request for supplier policy confirmation found in the expected output.",
+      "duration_ms": 25068
+    },
+    {
+      "golden_id": "edge_05_pico_compra",
+      "input": "Detectamos pico de compra e uso de armazem terceirizado. Que acao de negociacao sugere?",
+      "expected_output": "Revisar lote minimo e calendario de entregas com o fornecedor, negociando fracionamento ou fee logistico tabelado, e monitorar indicador de custo logistico total sobre valor comprado.",
+      "actual_output": "Considerando o pico de compra e uso do armazém terceirizado, e com base nos resultados da ferramenta \"arquivos_lotes\", sugere-se as seguintes ações de negociação:\n\n1.  **Revisão do Cálculo EOQ:** Implementar a atualização do Lote Econômico (EOQ) com ajustes na ferramenta manual, considerando a demanda mensal atualizada. O potencial máximo de redução de tamanho de lote é de R$ 13 milhões (7% do total), o que pode gerar economia significativa.\n\n2.  **Otimização dos Lotes:** Utilizar “ranges” de roteiros atuais ou alternativos para reduzir os lotes, analisando dias de cobertura (PA’s e insumos) e demanda futura (SAP APO).\n\n3.  **Negociação com Fornecedores:** Realizar um *trade-off* entre custos e benefícios com fornecedores, explorando alternativas de desdobramento de lotes com diferentes fornecedores.\n\n4. **Redução de Descartes:** Implementar ações para reduzir os descartes de SKU’s (Stock Keeping Units) para o grupo, devido ao vencimento dos produtos.",
+      "score": 0.4,
+      "passed": false,
+      "reason": "The actual output partially aligns with the expected output by suggesting actions related to EOQ revision, lot optimization, and supplier negotiation. However, it includes additional details like SKU reduction due to expiration which is not present in the expected output. There's a clear regression regarding the specific focus on 'fracionamento ou fee logistico tabelado' and monitoring of logistic cost indicators, indicating a significant deviation from the concise expectation.",
+      "duration_ms": 29770
+    }
+  ],
+  "regressions_vs_baseline": []
+}

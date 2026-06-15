@@ -1,0 +1,57 @@
+{
+  "dataset": {
+    "name": "Default of Credit Card Clients",
+    "source": "UCI Machine Learning Repository (ID 350)",
+    "url": "https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients",
+    "n_records": 30000,
+    "n_features": 23,
+    "target_column_uci": "default_payment_next_month",
+    "target_column_domain": "risco_renegociacao_urgente",
+    "target_interpretation": "No dominio de compras de insumos cosmeticos, a inadimplencia do cartao (UCI) foi contextualizada como risco de renegociacao urgente por excesso de estoque ou pressao de custo.",
+    "class_balance": {
+      "negativo_sem_risco": 23364,
+      "positivo_risco_alto": 6636
+    }
+  },
+  "model": {
+    "algorithm": "RandomForestClassifier",
+    "n_estimators": 200,
+    "max_depth": 12,
+    "test_size": 0.2,
+    "random_state": 42
+  },
+  "metrics": {
+    "accuracy": 0.7758,
+    "precision": 0.4945,
+    "recall": 0.6066,
+    "f1": 0.5448,
+    "roc_auc": 0.7746
+  },
+  "primary_metric": "recall",
+  "primary_metric_rationale": "Em compras de insumos com validade, falhar em detectar um SKU de alto risco (baixo recall) pode gerar obsolescencia e perda financeira; priorizamos recall com class_weight balanced, aceitando alguns falsos positivos revisaveis pelo comprador.",
+  "feature_columns": [
+    "LIMIT_BAL",
+    "SEX",
+    "EDUCATION",
+    "MARRIAGE",
+    "AGE",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_4",
+    "PAY_5",
+    "PAY_6",
+    "BILL_AMT1",
+    "BILL_AMT2",
+    "BILL_AMT3",
+    "BILL_AMT4",
+    "BILL_AMT5",
+    "BILL_AMT6",
+    "PAY_AMT1",
+    "PAY_AMT2",
+    "PAY_AMT3",
+    "PAY_AMT4",
+    "PAY_AMT5",
+    "PAY_AMT6"
+  ]
+}
