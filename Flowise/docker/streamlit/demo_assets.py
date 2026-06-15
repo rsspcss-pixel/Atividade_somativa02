@@ -26,7 +26,7 @@ def dataset_files(source_dir: Path | None = None) -> list[Path]:
     return sorted(root.glob("produtos_*.csv"))
 
 
-def ensure_dataset(*, rows: int = 800, files: int = 2) -> list[Path]:
+def ensure_dataset(*, rows: int = 5000, files: int = 5) -> list[Path]:
     existing = dataset_files()
     if existing:
         return existing
@@ -38,7 +38,6 @@ def ensure_dataset(*, rows: int = 800, files: int = 2) -> list[Path]:
     generate_mock_data.FILES_TO_GENERATE = files
     generate_mock_data.OUTPUT_DIR = DATA_DIR
     generate_mock_data.main()
-
     created = dataset_files()
     if not created:
         raise FileNotFoundError(f"Falha ao gerar CSV em {DATA_DIR}")

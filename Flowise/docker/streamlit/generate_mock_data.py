@@ -5,7 +5,9 @@ import random
 
 import pandas as pd
 
-OUTPUT_DIR = Path("data")
+from app_paths import DATA_DIR
+
+OUTPUT_DIR = DATA_DIR
 ROWS_PER_FILE = 5000
 FILES_TO_GENERATE = 5
 RANDOM_SEED = 42

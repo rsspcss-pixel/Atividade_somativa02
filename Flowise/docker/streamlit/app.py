@@ -379,7 +379,7 @@ def render_duckdb_tab():
     if not all_files:
         st.warning(
             f"Nenhum dataset encontrado em `{DUCKDB_SOURCE_DIR}`. "
-            "Execute `python demo_assets.py` na pasta do Streamlit para gerar CSV e treinar o ML."
+            "Execute `python generate_mock_data.py` na pasta do Streamlit para gerar os CSVs ficticios."
         )
         return
 
@@ -553,7 +553,7 @@ def render_ml_tab():
     with tab_insumo:
         all_files = get_dataset_files()
         if not all_files:
-            st.info("Execute `python demo_assets.py` para gerar CSVs e treinar o modelo ML.")
+            st.info("Gere os CSVs com `python generate_mock_data.py` para usar predicao por insumo.")
             return
         selected_files = st.multiselect(
             "Arquivos para buscar insumos",
