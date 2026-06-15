@@ -1,5 +1,7 @@
 import os
 
+from app_paths import resolve_app_path
+
 
 def _normalize_secret_env(value: str | None) -> str:
     """Remove espacos e aspas envolventes comuns em ficheiros .env."""
@@ -50,16 +52,22 @@ FLOWISE_API_URL = _required("FLOWISE_API_URL")
 FLOWISE_API_TOKEN = _required("FLOWISE_API_TOKEN")
 REQUEST_CONNECT_TIMEOUT_SECONDS = _optional_int("REQUEST_CONNECT_TIMEOUT_SECONDS", "10")
 REQUEST_READ_TIMEOUT_SECONDS = _optional_int("REQUEST_READ_TIMEOUT_SECONDS", "600")
-DUCKDB_DATABASE_PATH = _get_config_value("DUCKDB_DATABASE_PATH", "data/compras.duckdb") or "data/compras.duckdb"
-DUCKDB_SOURCE_DIR = _get_config_value("DUCKDB_SOURCE_DIR", "data") or "data"
+DUCKDB_DATABASE_PATH = str(
+    resolve_app_path(_get_config_value("DUCKDB_DATABASE_PATH", "data/compras.duckdb") or "data/compras.duckdb")
+)
+DUCKDB_SOURCE_DIR = str(resolve_app_path(_get_config_value("DUCKDB_SOURCE_DIR", "data") or "data"))
 
 # ChromaDB opcional (pesado; desativado por defeito em producao / Streamlit Cloud)
 CHROMA_ENABLED = _env_bool("CHROMA_ENABLED", "0")
 OPENAI_API_KEY = _get_config_value("OPENAI_API_KEY")
 OPENAI_EMBEDDING_MODEL = _get_config_value("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small") or "text-embedding-3-small"
-CHROMA_PERSIST_DIRECTORY = _get_config_value("CHROMA_PERSIST_DIRECTORY", "data/chroma") or "data/chroma"
+CHROMA_PERSIST_DIRECTORY = str(
+    resolve_app_path(_get_config_value("CHROMA_PERSIST_DIRECTORY", "data/chroma") or "data/chroma")
+)
 CHROMA_COLLECTION_NAME = _get_config_value("CHROMA_COLLECTION_NAME", "negociacao_conhecimento") or "negociacao_conhecimento"
-KNOWLEDGE_TXT_DIR = _get_config_value("KNOWLEDGE_TXT_DIR", "data/documentos_negociacao") or "data/documentos_negociacao"
+KNOWLEDGE_TXT_DIR = str(
+    resolve_app_path(_get_config_value("KNOWLEDGE_TXT_DIR", "data/documentos_negociacao") or "data/documentos_negociacao")
+)
 CHAT_PROMPT_PREFIX = _get_config_value("CHAT_PROMPT_PREFIX", "")
 
 # Guardrails (ver guardrails.py)

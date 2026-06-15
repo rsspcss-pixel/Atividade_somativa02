@@ -17,11 +17,16 @@ from fastapi import FastAPI, Header, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from api_security import env_int, public_error_detail, require_token_in_production
+from app_paths import resolve_app_path
 from ml.duckdb_lookup import find_insumo_by_id, resolve_insumo_row, search_insumos
 from ml.predict import load_metrics, model_is_ready, predict_insumo, predict_uci_row
 
+import demo_assets
+
+demo_assets.ensure_all()
+
 ML_API_TOKEN = os.getenv("ML_API_TOKEN", "").strip()
-DUCKDB_SOURCE_DIR = os.getenv("DUCKDB_SOURCE_DIR", "data").strip()
+DUCKDB_SOURCE_DIR = str(resolve_app_path(os.getenv("DUCKDB_SOURCE_DIR", "data").strip() or "data"))
 ML_API_MAX_QUERY_LEN = env_int("ML_API_MAX_QUERY_LEN", 200)
 
 require_token_in_production(ML_API_TOKEN, "ML_API_TOKEN")

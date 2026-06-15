@@ -22,6 +22,7 @@ Flowise/docker/streamlit/data/compras.duckdb
 Flowise/docker/streamlit/data/*.wal
 Flowise/docker/streamlit/data/chroma/
 Flowise/docker/streamlit/ml/models/*.pkl
+!Flowise/docker/streamlit/ml/models/risco_renegociacao.pkl
 
 # IDE
 .idea/

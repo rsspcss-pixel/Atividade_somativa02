@@ -1,0 +1,29 @@
+Documento interno ficticio — Insumos destaque Lumina Cosmetics (dados alinhados ao cadastro DuckDB)
+
+Use estes exemplos quando o usuario citar insumos comuns sem pedir ID exato.
+
+INS-01-00002 | Niacinamida | Ativo funcional | Essencia Pura Supply
+- Lote minimo: 150 kg | Consumo 6m: ~1.755 kg | Custo: ~R$ 375/kg | Criticidade: alta
+- Cobertura do lote: ~0,09 meses (lote baixo vs consumo — favoravel)
+- Acao tipica: negociar preco e prazo, nao ha excesso estrutural
+
+INS-01-00042 | Glicerina bidestilada | Umectante | Quimnova Trading
+- Lote minimo: 250 kg | Consumo 6m: ~1.698 kg | Custo: ~R$ 691/kg | Criticidade: alta
+- Cobertura: ~0,15 meses — situacao saudavel
+
+INS-01-00005 | Lauril eter sulfato de sodio | Tensoativo | Insumos DermaTech
+- Lote minimo: 500 g (unidade cadastro) | Consumo 6m: ~744 g | Criticidade: alta
+- Verificar unidade na negociacao (kg vs g) — risco de erro de escala
+
+INS-01-00017 | Acido hialuronico | Ativo funcional | BioAtivos Sul
+- Lote minimo: 1.000 mL | Consumo 6m: ~374 mL | Criticidade: alta
+- Cobertura ~2,7 meses — acionar analise de fracionamento se meta classe A = 1,5 meses
+
+INS-01-00047 | Niacinamida | Ativo funcional | AromaBase Import
+- Lote minimo: 50 kg | Consumo 6m: ~1.856 kg | Criticidade: baixa
+- Multi-fornecedor disponivel — usar benchmark entre Essencia Pura e AromaBase
+
+Fornecedores recorrentes no cadastro:
+CosmoQuimica Brasil, Insumos DermaTech, NaturaPrima Quimicos, BioAtivos Sul,
+AromaBase Import, CoreLab Ingredients, Quimnova Trading, GreenLab Mat-primas,
+Essencia Pura Supply, DermaLink Distribuidora.

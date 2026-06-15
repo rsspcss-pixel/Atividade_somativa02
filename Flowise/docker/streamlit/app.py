@@ -10,6 +10,13 @@ import streamlit as st
 
 import guardrails
 
+import demo_assets
+
+try:
+    demo_assets.ensure_all()
+except Exception:
+    pass
+
 FLOWISE_READY = True
 FLOWISE_CONFIG_ERROR = ""
 FLOWISE_API_URL = ""
@@ -125,7 +132,7 @@ def fake_stream(answer: str, placeholder):
             break
         built = f"{built} {part}".strip()
         placeholder.markdown(built)
-        time.sleep(0.001)
+        time.sleep(0.0005)
     return built or answer
 
 
@@ -371,8 +378,8 @@ def render_duckdb_tab():
     all_files = get_dataset_files()
     if not all_files:
         st.warning(
-            "Nenhum dataset encontrado em 'data/'. "
-            "Execute `python generate_mock_data.py` para gerar os arquivos ficticios."
+            f"Nenhum dataset encontrado em `{DUCKDB_SOURCE_DIR}`. "
+            "Execute `python demo_assets.py` na pasta do Streamlit para gerar CSV e treinar o ML."
         )
         return
 
@@ -546,7 +553,7 @@ def render_ml_tab():
     with tab_insumo:
         all_files = get_dataset_files()
         if not all_files:
-            st.info("Gere os CSVs com `python generate_mock_data.py` para usar predicao por insumo.")
+            st.info("Execute `python demo_assets.py` para gerar CSVs e treinar o modelo ML.")
             return
         selected_files = st.multiselect(
             "Arquivos para buscar insumos",

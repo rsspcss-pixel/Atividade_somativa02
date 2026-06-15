@@ -44,6 +44,13 @@ if (-not (Wait-ForDatabase -Path $DbPath -TimeoutSec $WaitSeconds)) {
 
 Push-Location $ScriptDir
 try {
+    $seedScript = Join-Path $ScriptDir "streamlit\seed_demo_data.py"
+    if (Test-Path -LiteralPath $seedScript) {
+        Write-Host "Preparando dataset + modelo ML..." -ForegroundColor Cyan
+        python $seedScript --train-ml
+        if ($LASTEXITCODE -ne 0) { throw "seed_demo_data.py falhou." }
+    }
+
     python flowise/install_negociacao_agent.py --db $DbPath
     if ($LASTEXITCODE -ne 0) { throw "install_negociacao_agent.py falhou." }
 

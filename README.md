@@ -73,6 +73,17 @@ Flowise/
    - `FLOWISE_API_URL` com o ID do chatflow correto
    - `FLOWISE_API_TOKEN=local-dev` (se o chatflow não tiver API key atribuída)
 
+## Dataset e Machine Learning
+
+Na pasta `Flowise/docker/streamlit`:
+
+```powershell
+python demo_assets.py          # gera CSV (se faltar) + treina modelo ML
+python seed_demo_data.py --train-ml
+```
+
+O app prepara automaticamente dataset e modelo na inicialização. O classificador fica em `ml/models/risco_renegociacao.pkl`.
+
 ## Documentação adicional
 
 - [docker/README.md](Flowise/docker/README.md) — Docker e variáveis de ambiente

@@ -11,6 +11,7 @@ data/chroma/
 data/compras.duckdb
 data/*.wal
 ml/models/*.pkl
+!ml/models/risco_renegociacao.pkl
 __pycache__/
 *.pyc
 

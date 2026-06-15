@@ -42,6 +42,7 @@ docker/streamlit/data/chroma/
 docker/streamlit/data/compras.duckdb
 docker/streamlit/data/*.wal
 docker/streamlit/ml/models/*.pkl
+!docker/streamlit/ml/models/risco_renegociacao.pkl
 docker/streamlit/Untitled
 **/__pycache__/
 **/*.pyc

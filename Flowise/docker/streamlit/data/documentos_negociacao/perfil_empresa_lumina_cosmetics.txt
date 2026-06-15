@@ -1,0 +1,38 @@
+Documento interno ficticio — Lumina Cosmetics Industria e Comercio Ltda.
+
+1. Identificacao
+- Razao social: Lumina Cosmetics Industria e Comercio Ltda.
+- CNPJ ficticio: 12.345.678/0001-90
+- Sede: Campinas/SP | CD principal: Sumare/SP
+- Segmento: cosmeticos pessoais (skincare, hair care, body care)
+- Faturamento anual simulado: R$ 420 milhoes
+- SKUs de insumo ativos no cadastro: ~2.500 | Fornecedores homologados: 38
+
+2. Operacao de compras
+- Equipe: 12 compradores + 4 analistas de suprimentos
+- ERP: SAP S/4HANA | Planejamento: PFO mensal com revisao quinzenal
+- Categorias prioritarias: tensoativos, ativos funcionais, conservantes, fragrancias
+- Meta de OTIF fornecedor: 95% | Lead time medio alvo: 28 dias
+
+3. Politica de estoque (resumo)
+- Cobertura alvo classe A: 45 dias | B: 60 dias | C: 90 dias
+- Estoque de seguranca: 15 dias (A), 20 dias (B), 30 dias (C)
+- Lote minimo negociavel: preferir <= 2 meses de consumo (classe A) ou <= 3 meses (B/C)
+- Revisao de lote minimo: trimestral ou quando desvio de giro > 20%
+
+4. Fornecedores estrategicos (ficticios)
+- CosmoQuimica Brasil: tensoativos e umectantes, lote tipico 100-250 kg
+- Insumos DermaTech: ativos (Niacinamida, Acido hialuronico), lote 50-500 kg
+- NaturaPrima Quimicos: conservantes, lote 25-200 L
+- BioAtivos Sul: emolientes e ativos naturais, lote 25-150 kg
+- Essencia Pura Supply: fragrancias, lote 150-500 L
+
+5. Indicadores recentes (simulados)
+- 18% dos SKUs com lote minimo acima da cobertura alvo
+- Custo de armazenagem extra estimado: R$ 1,2 mi/ano por excesso de lote
+- 6 negociacoes em andamento com foco em fracionamento de lote (Q2)
+
+6. Contatos internos (ficticios)
+- Diretoria Suprimentos: Ana Ribeiro
+- Compras Insumos Criticos: Marco Silva
+- Controladoria / custo logistico: Patricia Nunes

@@ -1,6 +1,6 @@
 {
     "name": "buscar_insumo_duckdb",
-    "description": "Busca insumos cosmeticos na camada de dados (DuckDB/CSV) por nome, fornecedor ou ID. Use quando precisar de consumo medio, lote minimo, custo unitario, criticidade ou fornecedor antes de negociar. Retorna ate 10 registros ordenados por impacto financeiro.",
+    "description": "Busca insumos cosmeticos Lumina (DuckDB) por nome, fornecedor ou ID. Retorna lote minimo, consumo, custo e cobertura.",
     "color": "linear-gradient(rgb(25,40,65), rgb(35,90,120))",
     "iconSrc": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/duckdb-icon.svg",
     "schema": "[{\"id\":0,\"property\":\"query\",\"description\":\"Termo de busca: nome do insumo (ex.: Niacinamida), fornecedor (ex.: CosmoQuimica) ou ID (ex.: INS-01-00042).\",\"type\":\"string\",\"required\":true},{\"id\":1,\"property\":\"limit\",\"description\":\"Quantidade maxima de resultados (1 a 20, padrao 10).\",\"type\":\"number\",\"required\":false}]",

@@ -1,0 +1,47 @@
+Documento interno ficticio — Lumina Cosmetics | Gestao de lotes minimos de compra
+
+1. Objetivo
+Padronizar analise, negociacao e aprovacao de lotes minimos de compra de insumos cosmeticos,
+equilibrando preco unitario, custo de armazenagem, risco de obsolescencia e service level.
+
+2. Conceitos-chave
+- Lote minimo (MOQ): quantidade minima que o fornecedor aceita por pedido ou entrega.
+- EOQ (lote economico): sqrt(2 * D * S / H), onde D=demanda anual, S=custo pedido, H=custo armazenagem/un/ano.
+- Ponto de pedido: consumo durante lead time + estoque de seguranca.
+- Cobertura (meses) = lote minimo / consumo medio mensal.
+- Excesso estrutural: cobertura do lote minimo acima da meta da classe ABC.
+
+3. Regras de decisao (Lumina)
+| Situacao | Acao recomendada |
+| Cobertura <= meta da classe | Aprovar negociacao de preco |
+| Cobertura 1,2x a 1,8x meta | Negociar fracionamento ou desconto compensatorio |
+| Cobertura > 1,8x meta | Escalar para Comite de Lotes; buscar fornecedor alternativo |
+| Insumo validade < 12 meses + lote alto | Exigir FEFO, clausula de troca ou lote reduzido |
+| Criticidade alta + lote elevado | Priorizar consignacao ou VMI com fornecedor |
+
+4. Formula rapida — impacto financeiro do excesso de lote
+Excesso unidades = max(0, lote minimo - consumo_6m)
+Custo excesso (6m) = Excesso unidades * custo unitario
+Custo armazenagem extra (estimativa Lumina) = 2,8% a.m. sobre valor do excesso
+
+Exemplo: Niacinamida, lote 500 kg, consumo 6m = 1755 kg -> sem excesso.
+Exemplo: item com lote 500 kg e consumo 6m = 400 kg -> excesso 100 kg; se custo R$ 375/kg -> R$ 37.500 imobilizados + ~R$ 2.100/mes armazenagem.
+
+5. Checklist negociacao de lote minimo
+[ ] Consumo 4m, 6m e 12m validados com PFO
+[ ] Cobertura em meses calculada vs meta ABC
+[ ] Custo armazenagem extra estimado (delta)
+[ ] Alternativas: fracionamento, multi-fornecedor, consignacao
+[ ] Clausulas: validade minima, prazo entrega, bonificacao por volume real
+[ ] Registro na ata de negociacao
+
+6. Aprovacao
+- Ate 15% acima da meta de cobertura: Comprador + Analista
+- 15% a 40% acima: + Gerente Suprimentos
+- Acima de 40% ou impacto > R$ 150 mil: Comite de Lotes (Compras, Financeiro, Producao)
+
+7. KPIs de acompanhamento
+- % SKUs com lote acima da meta
+- Custo logistico total / valor comprado
+- Dwell time medio pos-compra vs projecao
+- Taxa de renegociacao urgente (integracao com modelo ML de risco)

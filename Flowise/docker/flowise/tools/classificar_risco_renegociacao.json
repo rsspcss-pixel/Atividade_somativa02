@@ -1,6 +1,6 @@
 {
     "name": "classificar_risco_renegociacao",
-    "description": "Classifica o risco de renegociacao urgente de um insumo cosmetico usando o modelo ML (dataset UCI contextualizado). Use quando o usuario perguntar sobre risco de estoque, renegociacao de lote minimo ou prioridade de compra. Informe id_insumo OU o nome do insumo; fornecedor e opcional para desambiguar.",
+    "description": "Classifica risco de renegociacao urgente de insumo cosmetico (ML). Informe id_insumo ou nome do insumo.",
     "color": "linear-gradient(rgb(35,57,93), rgb(32,51,84))",
     "iconSrc": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/python.svg",
     "schema": "[{\"id\":0,\"property\":\"id_insumo\",\"description\":\"ID do insumo no cadastro (ex.: INS-01-00042). Preferencial se conhecido.\",\"type\":\"string\",\"required\":false},{\"id\":1,\"property\":\"insumo\",\"description\":\"Nome do insumo cosmetico (ex.: Niacinamida, Glicerina bidestilada).\",\"type\":\"string\",\"required\":false},{\"id\":2,\"property\":\"fornecedor\",\"description\":\"Nome do fornecedor para filtrar quando houver homonimos.\",\"type\":\"string\",\"required\":false}]",

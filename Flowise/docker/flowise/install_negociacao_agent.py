@@ -14,20 +14,19 @@ import sqlite3
 import uuid
 from pathlib import Path
 
+from agent_config import (
+    AGENT_FLOW_NAME,
+    CHATFLOW_ID,
+    DEFAULT_CHAT_MODEL,
+    MAX_TOKENS,
+    MEMORY_WINDOW,
+    TEMPERATURE,
+    TOOL_NAMES,
+    build_system_message,
+)
+
 DEFAULT_DB = Path.home() / ".flowise" / "database.sqlite"
 TOOLS_DIR = Path(__file__).resolve().parent / "tools"
-CHATFLOW_ID = "f92dd892-ced9-4396-863b-9675b17242fb"
-AGENT_FLOW_NAME = "Assistente Negociacao"
-TOOL_NAMES = ("buscar_insumo_duckdb", "classificar_risco_renegociacao")
-DEFAULT_CHAT_MODEL = "google/gemma-3-4b"
-
-SYSTEM_MESSAGE = (
-    "Voce e um assistente de apoio a negociacao de compras de insumos cosmeticos. "
-    "Responda sempre em portugues do Brasil, de forma objetiva e clara. "
-    "Use as ferramentas buscar_insumo_duckdb e classificar_risco_renegociacao quando "
-    "precisar de dados de insumos, consumo, lote minimo, custos ou risco de renegociacao. "
-    "Quando nao houver dados suficientes, diga o que falta e sugira proximos passos."
-)
 
 
 def load_tool_spec(name: str) -> dict:
@@ -82,9 +81,9 @@ def build_flow_data(credential_id: str | None) -> dict:
     model_config: dict = {
         "cache": "",
         "modelName": DEFAULT_CHAT_MODEL,
-        "temperature": 0.4,
+        "temperature": TEMPERATURE,
         "streaming": True,
-        "maxTokens": "768",
+        "maxTokens": MAX_TOKENS,
         "topP": "",
         "frequencyPenalty": "",
         "presencePenalty": "",
@@ -123,7 +122,7 @@ def build_flow_data(credential_id: str | None) -> dict:
                     "type": "Agent",
                     "inputs": {
                         "agentModel": "chatOpenAICustom",
-                        "agentMessages": [{"role": "system", "content": SYSTEM_MESSAGE}],
+                        "agentMessages": [{"role": "system", "content": build_system_message()}],
                         "agentTools": [
                             {
                                 "agentSelectedTool": tool_name,
@@ -135,7 +134,7 @@ def build_flow_data(credential_id: str | None) -> dict:
                         "agentKnowledgeVSEmbeddings": "",
                         "agentEnableMemory": True,
                         "agentMemoryType": "windowSize",
-                        "agentMemoryWindowSize": 6,
+                        "agentMemoryWindowSize": MEMORY_WINDOW,
                         "agentUserMessage": "",
                         "agentReturnResponseAs": "assistantMessage",
                         "agentStructuredOutput": "",
@@ -215,12 +214,12 @@ def main() -> int:
     print(f"Tools instaladas: {', '.join(f'{n} ({tid})' for n, tid in zip(TOOL_NAMES, tool_ids))}")
     print(f"Agentflow '{AGENT_FLOW_NAME}' pronto (id={CHATFLOW_ID})")
     print(f"Prediction URL: http://localhost:3000/api/v1/prediction/{CHATFLOW_ID}")
+    print(f"Conhecimento: {len(build_system_message())} chars no system prompt")
     if not credential_id:
         print("")
         print("AVISO: Nenhuma credencial OpenAI encontrada no Flowise.")
         print("       Abra http://localhost:3000 -> Credentials e crie 'OpenAI API' apontando para:")
         print("       Base URL: http://host.docker.internal:1234/v1  |  API Key: lm-studio")
-        print("       Depois reexecute este script ou edite o agentflow na UI.")
     print("")
     print("Streamlit: use FLOWISE_API_TOKEN=local-dev se o chatflow nao tiver API key atribuida.")
     return 0
