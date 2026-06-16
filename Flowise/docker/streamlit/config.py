@@ -1,6 +1,6 @@
 import os
 
-from app_paths import resolve_app_path
+from app_paths import APP_ROOT, DATA_DIR, resolve_app_path
 
 # Defaults (sobrescritos por initialize())
 CHAT_BACKEND = "openai"
@@ -10,13 +10,13 @@ OPENAI_API_KEY = ""
 OPENAI_CHAT_MODEL = "gpt-4o-mini"
 REQUEST_CONNECT_TIMEOUT_SECONDS = 10
 REQUEST_READ_TIMEOUT_SECONDS = 600
-DUCKDB_DATABASE_PATH = "data/compras.duckdb"
-DUCKDB_SOURCE_DIR = "data"
+DUCKDB_DATABASE_PATH = str(resolve_app_path("data/compras.duckdb"))
+DUCKDB_SOURCE_DIR = str(DATA_DIR)
 CHROMA_ENABLED = False
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
-CHROMA_PERSIST_DIRECTORY = "data/chroma"
+CHROMA_PERSIST_DIRECTORY = str(resolve_app_path("data/chroma"))
 CHROMA_COLLECTION_NAME = "negociacao_conhecimento"
-KNOWLEDGE_TXT_DIR = "data/documentos_negociacao"
+KNOWLEDGE_TXT_DIR = str(resolve_app_path("data/documentos_negociacao"))
 CHAT_PROMPT_PREFIX = ""
 APP_ENV = "demo"
 GUARDRAILS_ENABLED = True
@@ -29,6 +29,16 @@ GUARDRAILS_RATE_WINDOW_SECONDS = 60
 GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 
 _INITIALIZED = False
+_PATHS_INITIALIZED = False
+
+
+def _load_dotenv() -> None:
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(APP_ROOT / ".env")
+    except ImportError:
+        pass
 
 
 def _normalize_secret_env(value: str | None) -> str:
@@ -146,32 +156,20 @@ def _resolve_chat_backend() -> str:
     )
 
 
-def initialize() -> None:
-    """Carrega configuracao apos st.set_page_config (secrets disponiveis no Cloud)."""
-    global _INITIALIZED
-    global CHAT_BACKEND, FLOWISE_API_URL, FLOWISE_API_TOKEN, OPENAI_API_KEY, OPENAI_CHAT_MODEL
-    global REQUEST_CONNECT_TIMEOUT_SECONDS, REQUEST_READ_TIMEOUT_SECONDS
+def initialize_paths() -> None:
+    """Caminhos de dados/ML — sempre absolutos, independente do chat."""
+    global _PATHS_INITIALIZED
     global DUCKDB_DATABASE_PATH, DUCKDB_SOURCE_DIR, CHROMA_ENABLED, OPENAI_EMBEDDING_MODEL
     global CHROMA_PERSIST_DIRECTORY, CHROMA_COLLECTION_NAME, KNOWLEDGE_TXT_DIR, CHAT_PROMPT_PREFIX
     global APP_ENV, GUARDRAILS_ENABLED, GUARDRAILS_MAX_INPUT_CHARS, GUARDRAILS_BLOCK_INJECTION
     global GUARDRAILS_BLOCK_ON_PII, GUARDRAILS_APPEND_DISCLAIMER, GUARDRAILS_RATE_LIMIT
     global GUARDRAILS_RATE_WINDOW_SECONDS, GUARDRAILS_LINK_ALLOWLIST
+    global REQUEST_CONNECT_TIMEOUT_SECONDS, REQUEST_READ_TIMEOUT_SECONDS, OPENAI_API_KEY
 
-    if _INITIALIZED:
+    if _PATHS_INITIALIZED:
         return
 
-    CHAT_BACKEND = _resolve_chat_backend()
-    FLOWISE_API_URL = ""
-    FLOWISE_API_TOKEN = ""
-    OPENAI_API_KEY = ""
-    OPENAI_CHAT_MODEL = "gpt-4o-mini"
-
-    if CHAT_BACKEND == "flowise":
-        FLOWISE_API_URL = _required("FLOWISE_API_URL")
-        FLOWISE_API_TOKEN = _required("FLOWISE_API_TOKEN")
-    else:
-        OPENAI_API_KEY = _required("OPENAI_API_KEY")
-        OPENAI_CHAT_MODEL = _get_config_value("OPENAI_CHAT_MODEL", "gpt-4o-mini") or "gpt-4o-mini"
+    _load_dotenv()
 
     REQUEST_CONNECT_TIMEOUT_SECONDS = _optional_int("REQUEST_CONNECT_TIMEOUT_SECONDS", "10")
     REQUEST_READ_TIMEOUT_SECONDS = _optional_int("REQUEST_READ_TIMEOUT_SECONDS", "600")
@@ -180,8 +178,7 @@ def initialize() -> None:
     )
     DUCKDB_SOURCE_DIR = str(resolve_app_path(_get_config_value("DUCKDB_SOURCE_DIR", "data") or "data"))
     CHROMA_ENABLED = _env_bool("CHROMA_ENABLED", "0")
-    if not OPENAI_API_KEY:
-        OPENAI_API_KEY = _get_config_value("OPENAI_API_KEY")
+    OPENAI_API_KEY = _get_config_value("OPENAI_API_KEY")
     OPENAI_EMBEDDING_MODEL = (
         _get_config_value("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small") or "text-embedding-3-small"
     )
@@ -207,4 +204,33 @@ def initialize() -> None:
     GUARDRAILS_RATE_WINDOW_SECONDS = _optional_int("GUARDRAILS_RATE_WINDOW_SECONDS", "60") or 60
     _link_allowlist_raw = _get_config_value("GUARDRAILS_LINK_ALLOWLIST", "")
     GUARDRAILS_LINK_ALLOWLIST = [p.strip() for p in _link_allowlist_raw.split(",") if p.strip()]
+    _PATHS_INITIALIZED = True
+
+
+def initialize_chat() -> None:
+    """Credenciais do chat (Flowise ou OpenAI)."""
+    global CHAT_BACKEND, FLOWISE_API_URL, FLOWISE_API_TOKEN, OPENAI_API_KEY, OPENAI_CHAT_MODEL
+
+    CHAT_BACKEND = _resolve_chat_backend()
+    FLOWISE_API_URL = ""
+    FLOWISE_API_TOKEN = ""
+    OPENAI_CHAT_MODEL = "gpt-4o-mini"
+
+    if CHAT_BACKEND == "flowise":
+        FLOWISE_API_URL = _required("FLOWISE_API_URL")
+        FLOWISE_API_TOKEN = _required("FLOWISE_API_TOKEN")
+    else:
+        OPENAI_API_KEY = _required("OPENAI_API_KEY")
+        OPENAI_CHAT_MODEL = _get_config_value("OPENAI_CHAT_MODEL", "gpt-4o-mini") or "gpt-4o-mini"
+
+
+def initialize() -> None:
+    """Carrega configuracao apos st.set_page_config (secrets disponiveis no Cloud)."""
+    global _INITIALIZED
+
+    if _INITIALIZED:
+        return
+
+    initialize_paths()
+    initialize_chat()
     _INITIALIZED = True

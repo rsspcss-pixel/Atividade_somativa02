@@ -12,12 +12,9 @@ st.set_page_config(page_title="Assistente de negociacao", page_icon="💬", layo
 
 import guardrails
 
-import demo_assets
+from app_paths import DATA_DIR, resolve_app_path
 
-try:
-    demo_assets.ensure_all()
-except Exception:
-    pass
+import demo_assets
 
 CHAT_READY = True
 CHAT_CONFIG_ERROR = ""
@@ -28,13 +25,13 @@ OPENAI_API_KEY = ""
 OPENAI_CHAT_MODEL = "gpt-4o-mini"
 REQUEST_CONNECT_TIMEOUT_SECONDS = 10
 REQUEST_READ_TIMEOUT_SECONDS = 600
-DUCKDB_DATABASE_PATH = "data/compras.duckdb"
-DUCKDB_SOURCE_DIR = "data"
+DUCKDB_DATABASE_PATH = str(resolve_app_path("data/compras.duckdb"))
+DUCKDB_SOURCE_DIR = str(DATA_DIR)
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
 CHROMA_ENABLED = False
-CHROMA_PERSIST_DIRECTORY = "data/chroma"
+CHROMA_PERSIST_DIRECTORY = str(resolve_app_path("data/chroma"))
 CHROMA_COLLECTION_NAME = "negociacao_conhecimento"
-KNOWLEDGE_TXT_DIR = "data/documentos_negociacao"
+KNOWLEDGE_TXT_DIR = str(resolve_app_path("data/documentos_negociacao"))
 CHAT_PROMPT_PREFIX = ""
 APP_ENV = "demo"
 GUARDRAILS_ENABLED = True
@@ -49,7 +46,12 @@ GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 try:
     import config
 
-    config.initialize()
+    config.initialize_paths()
+    try:
+        config.initialize_chat()
+    except Exception as chat_exc:
+        CHAT_READY = False
+        CHAT_CONFIG_ERROR = str(chat_exc)
     CHAT_BACKEND = config.CHAT_BACKEND
     CHROMA_COLLECTION_NAME = config.CHROMA_COLLECTION_NAME
     CHROMA_ENABLED = config.CHROMA_ENABLED
@@ -77,6 +79,11 @@ try:
 except Exception as exc:
     CHAT_READY = False
     CHAT_CONFIG_ERROR = str(exc)
+
+try:
+    demo_assets.ensure_all()
+except Exception:
+    pass
 
 _CHAT_RATE_LIMITER = guardrails.RateLimiter(
     max_requests=GUARDRAILS_RATE_LIMIT if CHAT_READY else 20,
@@ -310,9 +317,17 @@ def find_last_user_message(messages):
 
 
 def get_dataset_files() -> list[Path]:
-    source_dir = Path(DUCKDB_SOURCE_DIR)
-    cosmeticos = sorted(source_dir.glob("insumos_cosmeticos_*.csv"))
-    return cosmeticos or sorted(source_dir.glob("produtos_*.csv"))
+    source_dir = resolve_app_path(DUCKDB_SOURCE_DIR)
+
+    def _scan() -> list[Path]:
+        cosmeticos = sorted(source_dir.glob("insumos_cosmeticos_*.csv"))
+        return cosmeticos or sorted(source_dir.glob("produtos_*.csv"))
+
+    files = _scan()
+    if not files:
+        demo_assets.ensure_dataset()
+        files = _scan()
+    return files
 
 
 @st.cache_resource
