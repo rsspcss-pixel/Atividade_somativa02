@@ -701,11 +701,11 @@ def _fmt_ts(ts: float | None) -> str:
 
 
 def _openai_key_plausible(key: str) -> bool:
-    """Alinha com config: chave OpenAI de API costuma comecar com sk-."""
+    """Chave de API nao vazia (OpenAI ou compativel)."""
     k = (key or "").strip()
     if len(k) >= 2 and k[0] == k[-1] and k[0] in "\"'":
         k = k[1:-1].strip()
-    return len(k) > 8 and k.startswith("sk-")
+    return len(k) >= 20 and "..." not in k and "INSIRA" not in k.upper()
 
 
 def _openai_401_hint(message: str) -> str:
@@ -751,12 +751,11 @@ def render_chroma_tab():
 
     if not _openai_key_plausible(OPENAI_API_KEY):
         st.error(
-            "**OPENAI_API_KEY** nao parece uma chave da API OpenAI (esperado prefixo `sk-`, por exemplo `sk-proj-...`). "
-            "O valor atual pode ser o token do Flowise ou outro segredo — a ingestao e a consulta vao falhar com erro 401."
+            "**OPENAI_API_KEY** nao parece configurada corretamente (valor vazio ou placeholder). "
+            "A ingestao e a consulta Chroma podem falhar com erro 401."
         )
         st.info(
-            "Crie uma chave em [platform.openai.com/api-keys](https://platform.openai.com/api-keys) e configure-a "
-            "em st.secrets ou no `.env` local (Docker). Depois reinicie o app."
+            "Configure **OPENAI_API_KEY** em st.secrets ou no `.env` local (Docker). Depois reinicie o app."
         )
         return
 
