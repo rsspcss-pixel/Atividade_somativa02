@@ -48,8 +48,53 @@ def _env_bool(name: str, default: str = "0") -> bool:
     return _get_config_value(name, default).strip().lower() not in ("0", "false", "no")
 
 
-FLOWISE_API_URL = _required("FLOWISE_API_URL")
-FLOWISE_API_TOKEN = _required("FLOWISE_API_TOKEN")
+def _is_internal_flowise_url(url: str) -> bool:
+    lowered = url.lower().strip()
+    return (
+        lowered.startswith("http://flowise")
+        or "localhost" in lowered
+        or "127.0.0.1" in lowered
+    )
+
+
+def _resolve_chat_backend() -> str:
+    requested = _get_config_value("CHAT_BACKEND", "auto").strip().lower()
+    flowise_url = _get_config_value("FLOWISE_API_URL")
+    flowise_token = _get_config_value("FLOWISE_API_TOKEN")
+    openai_key = _get_config_value("OPENAI_API_KEY")
+
+    if requested == "openai":
+        return "openai"
+    if requested == "flowise":
+        return "flowise"
+
+    # auto: Streamlit Cloud usa OpenAI; Docker local usa Flowise
+    if openai_key and (not flowise_url or _is_internal_flowise_url(flowise_url)):
+        return "openai"
+    if flowise_url and flowise_token:
+        return "flowise"
+    if openai_key:
+        return "openai"
+    raise ValueError(
+        "Chat nao configurado. No Streamlit Cloud defina CHAT_BACKEND=openai e OPENAI_API_KEY. "
+        "Localmente use FLOWISE_API_URL + FLOWISE_API_TOKEN (Docker) ou OPENAI_API_KEY."
+    )
+
+
+CHAT_BACKEND = _resolve_chat_backend()
+
+FLOWISE_API_URL = ""
+FLOWISE_API_TOKEN = ""
+OPENAI_API_KEY = ""
+OPENAI_CHAT_MODEL = "gpt-4o-mini"
+
+if CHAT_BACKEND == "flowise":
+    FLOWISE_API_URL = _required("FLOWISE_API_URL")
+    FLOWISE_API_TOKEN = _required("FLOWISE_API_TOKEN")
+else:
+    OPENAI_API_KEY = _required("OPENAI_API_KEY")
+    OPENAI_CHAT_MODEL = _get_config_value("OPENAI_CHAT_MODEL", "gpt-4o-mini") or "gpt-4o-mini"
+
 REQUEST_CONNECT_TIMEOUT_SECONDS = _optional_int("REQUEST_CONNECT_TIMEOUT_SECONDS", "10")
 REQUEST_READ_TIMEOUT_SECONDS = _optional_int("REQUEST_READ_TIMEOUT_SECONDS", "600")
 DUCKDB_DATABASE_PATH = str(
@@ -59,7 +104,8 @@ DUCKDB_SOURCE_DIR = str(resolve_app_path(_get_config_value("DUCKDB_SOURCE_DIR", 
 
 # ChromaDB opcional (pesado; desativado por defeito em producao / Streamlit Cloud)
 CHROMA_ENABLED = _env_bool("CHROMA_ENABLED", "0")
-OPENAI_API_KEY = _get_config_value("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    OPENAI_API_KEY = _get_config_value("OPENAI_API_KEY")
 OPENAI_EMBEDDING_MODEL = _get_config_value("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small") or "text-embedding-3-small"
 CHROMA_PERSIST_DIRECTORY = str(
     resolve_app_path(_get_config_value("CHROMA_PERSIST_DIRECTORY", "data/chroma") or "data/chroma")

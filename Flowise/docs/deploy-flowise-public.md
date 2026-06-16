@@ -1,29 +1,10 @@
-# Deploy Flowise publico para Streamlit Cloud
+# Deploy Flowise publico (opcional)
 
-O Streamlit Cloud **nao alcanca** `localhost` nem `http://flowise:3000`. E necessario um Flowise com **URL HTTPS publica**.
+> **Para a entrega no Streamlit Cloud, use [deploy-streamlit-cloud.md](deploy-streamlit-cloud.md)** — o chat funciona com OpenAI direto, sem Flowise externo.
 
-## Opcao A — Render (recomendado, permanente)
+Este guia e apenas se voce quiser manter o agente **Flowise** como backend do chat (ex.: demo com ngrok ou hospedagem propria).
 
-1. Acesse [Render Blueprints](https://dashboard.render.com/blueprints)
-2. Conecte o repositorio `Atividade_somativa02`
-3. O arquivo [`render.yaml`](../../../render.yaml) na raiz cria o servico `flowise-lumina`
-4. Apos o deploy, abra a URL (ex.: `https://flowise-lumina.onrender.com`)
-5. Crie a conta admin e adicione credencial **OpenAI API** (modelo `gpt-4o-mini`)
-6. Provisione o agentflow e gere secrets:
-
-```powershell
-cd Flowise/docker
-.\deploy-flowise-public.ps1 `
-  -FlowiseUrl "https://flowise-lumina.onrender.com" `
-  -Email "admin@lumina.demo" `
-  -Password "SuaSenhaForte!" `
-  -Register
-```
-
-7. Cole o conteudo de `streamlit/.streamlit/cloud-secrets.toml` no **Streamlit Cloud → Settings → Secrets**
-8. Streamlit: **Main file path** = `Flowise/docker/streamlit/app.py`
-
-## Opcao B — ngrok (demo rapida)
+## Opcao A — ngrok (demo rapida)
 
 ```powershell
 cd Flowise/docker
@@ -34,37 +15,26 @@ cd Flowise/docker
 .\deploy-flowise-public.ps1 -FlowiseUrl "https://....ngrok-free.app" -SkipProvision
 ```
 
-## API de prediction
+No Streamlit Cloud, use `CHAT_BACKEND=flowise` e a URL HTTPS do ngrok em `FLOWISE_API_URL`.
+
+## Opcao B — Render (hospedagem permanente, opcional)
+
+Arquivos em `render.yaml` (raiz) e `Flowise/docker/render.yaml`. Nao e necessario para o deploy padrao no share.streamlit.io.
+
+## API de prediction (quando usar Flowise)
 
 | Item | Valor |
 |------|--------|
 | Endpoint | `{URL_PUBLICA}/api/v1/prediction/f92dd892-ced9-4396-863b-9675b17242fb` |
 | Metodo | `POST` |
-| Header | `Authorization: Bearer local-dev` (se chatflow sem API key) |
+| Header | `Authorization: Bearer local-dev` |
 | Body | `{"question": "...", "streaming": false}` |
-| Health | `{URL_PUBLICA}/api/v1/ping` |
 
-## Variaveis Streamlit Cloud (Secrets)
+## Secrets Streamlit (modo Flowise)
 
 ```toml
-FLOWISE_API_URL = "https://flowise-lumina.onrender.com/api/v1/prediction/f92dd892-ced9-4396-863b-9675b17242fb"
+CHAT_BACKEND = "flowise"
+FLOWISE_API_URL = "https://SUA-URL/api/v1/prediction/f92dd892-ced9-4396-863b-9675b17242fb"
 FLOWISE_API_TOKEN = "local-dev"
 CHROMA_ENABLED = "0"
-REQUEST_CONNECT_TIMEOUT_SECONDS = "15"
-REQUEST_READ_TIMEOUT_SECONDS = "120"
 ```
-
-## Troubleshooting
-
-| Problema | Solucao |
-|----------|---------|
-| Prediction 401 | Verifique token ou API key do chatflow no Flowise |
-| Resposta vazia | Adicione credencial OpenAI no Flowise e reprovisione |
-| Render dorme (free) | Primeira requisicao pode levar ~30s (cold start) |
-| Tools ML nao funcionam | No cloud o agente usa conhecimento embutido; ML/DuckDB ficam no Streamlit |
-
-## Arquivos relacionados
-
-- `Dockerfile.flowise-cloud` — imagem Render com bootstrap automatico
-- `flowise/provision_public_flowise.py` — import agentflow + gera secrets
-- `flowise/install_negociacao_agent.py --cloud` — perfil OpenAI sem LM Studio

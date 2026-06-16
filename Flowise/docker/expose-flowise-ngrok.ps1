@@ -19,7 +19,7 @@ if (-not $ScriptDir) { $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.P
 
 if (-not (Get-Command ngrok -ErrorAction SilentlyContinue)) {
     Write-Host "ERRO: ngrok nao encontrado. Instale: https://ngrok.com/download" -ForegroundColor Red
-    Write-Host "Alternativa: deploy no Render com .\deploy-flowise-public.ps1 -OpenRender" -ForegroundColor Yellow
+    Write-Host "No Streamlit Cloud use CHAT_BACKEND=openai (veja deploy-streamlit-cloud.ps1)." -ForegroundColor Yellow
     exit 1
 }
 

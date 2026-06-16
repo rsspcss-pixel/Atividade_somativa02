@@ -27,18 +27,24 @@ Sem LM Studio (só testar interface, chat pode não responder ao LLM):
 ## Streamlit Cloud
 
 1. Faça push deste repositório para o GitHub.
-2. **Flowise publico (obrigatório para o chat):** siga [Flowise/docs/deploy-flowise-public.md](Flowise/docs/deploy-flowise-public.md) — deploy no Render + secrets.
-3. Acesse [share.streamlit.io](https://share.streamlit.io) e conecte o repositório `Atividade_somativa02`.
-4. Configure:
+2. Acesse [share.streamlit.io](https://share.streamlit.io) e conecte o repositório `Atividade_somativa02`.
+3. Configure:
    - **Main file path:** `Flowise/docker/streamlit/app.py`
    - **Branch:** `main`
-5. Em **Settings → Secrets**, cole o conteúdo de `Flowise/docker/streamlit/.streamlit/cloud-secrets.toml` (gerado por `deploy-flowise-public.ps1`).
+4. Em **Settings → Secrets**, cole (com sua chave OpenAI):
+
+```toml
+CHAT_BACKEND = "openai"
+OPENAI_API_KEY = "sk-..."
+OPENAI_CHAT_MODEL = "gpt-4o-mini"
+CHROMA_ENABLED = "0"
+```
+
+Guia completo: [Flowise/docs/deploy-streamlit-cloud.md](Flowise/docs/deploy-streamlit-cloud.md)
 
 ```powershell
 cd Flowise/docker
-.\deploy-flowise-public.ps1 -OpenRender
-# apos deploy Render:
-.\deploy-flowise-public.ps1 -FlowiseUrl "https://SUA-URL.onrender.com" -Email "..." -Password "..." -Register
+.\deploy-streamlit-cloud.ps1 -OpenCloud
 ```
 
 ## Estrutura principal
@@ -82,6 +88,7 @@ O app prepara automaticamente dataset e modelo na inicialização. O classificad
 
 ## Documentação adicional
 
-- [docker/README.md](Flowise/docker/README.md) — Docker e variáveis de ambiente
+- [docs/deploy-streamlit-cloud.md](Flowise/docs/deploy-streamlit-cloud.md) — deploy no share.streamlit.io
+- [docs/deploy-flowise-public.md](Flowise/docs/deploy-flowise-public.md) — Flowise publico (opcional)
 - [docs/seguranca-llm.md](Flowise/docs/seguranca-llm.md) — segurança e guardrails
 - [docs/guardrails-demo.md](Flowise/docs/guardrails-demo.md) — demonstração antes/depois

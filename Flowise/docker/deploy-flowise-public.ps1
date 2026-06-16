@@ -1,13 +1,10 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Guia e scripts para expor Flowise publicamente (Render ou ngrok) e configurar Streamlit Cloud.
+    Provisiona Flowise publico (opcional) quando CHAT_BACKEND=flowise no Streamlit Cloud.
 
 .EXAMPLE
-    .\deploy-flowise-public.ps1
-
-.EXAMPLE
-    .\deploy-flowise-public.ps1 -FlowiseUrl "https://flowise-lumina.onrender.com" -Email "admin@lumina.demo" -Password "SenhaForte123!"
+    .\deploy-flowise-public.ps1 -FlowiseUrl "https://....ngrok-free.app" -SkipProvision
 #>
 [CmdletBinding()]
 param(
@@ -15,8 +12,7 @@ param(
     [string] $Email = "",
     [string] $Password = "",
     [switch] $Register,
-    [switch] $SkipProvision,
-    [switch] $OpenRender
+    [switch] $SkipProvision
 )
 
 Set-StrictMode -Version Latest
@@ -24,36 +20,18 @@ $ErrorActionPreference = "Stop"
 
 $ScriptDir = $PSScriptRoot
 if (-not $ScriptDir) { $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path }
-$RepoRoot = Resolve-Path (Join-Path $ScriptDir "..\..")
 
 Write-Host ""
-Write-Host "Flowise publico + Streamlit Cloud" -ForegroundColor Cyan
+Write-Host "Flowise publico (opcional — deploy padrao usa OpenAI no Streamlit Cloud)" -ForegroundColor Cyan
 Write-Host ""
-
-Write-Host "==> 1. Deploy no Render (recomendado)" -ForegroundColor Cyan
-Write-Host @"
-
-  a) Acesse https://dashboard.render.com -> New -> Blueprint
-  b) Conecte o repo: rsspcss-pixel/Atividade_somativa02
-  c) Render detecta render.yaml na raiz do repo
-  d) Apos deploy, anote a URL: https://flowise-lumina.onrender.com (exemplo)
-
-  e) Abra a URL -> crie conta admin -> Credentials -> OpenAI API
-     (cole sua OPENAI_API_KEY para gpt-4o-mini)
-
-"@ -ForegroundColor White
-
-Write-Host "==> 2. Tunel rapido (ngrok) — demo local" -ForegroundColor Cyan
-Write-Host "     Suba o stack: .\start-stack.ps1 -SkipLmStudio" -ForegroundColor DarkGray
-Write-Host "     Em outro terminal: .\expose-flowise-ngrok.ps1" -ForegroundColor DarkGray
+Write-Host "Para share.streamlit.io sem Flowise externo:" -ForegroundColor Green
+Write-Host "  .\deploy-streamlit-cloud.ps1 -OpenCloud" -ForegroundColor White
 Write-Host ""
-
-if ($OpenRender) {
-    Start-Process "https://dashboard.render.com/blueprints"
-}
+Write-Host "Este script e util apenas com CHAT_BACKEND=flowise + URL HTTPS (ngrok ou hospedagem propria)." -ForegroundColor DarkGray
+Write-Host ""
 
 if ($FlowiseUrl) {
-    Write-Host "==> 3. Provisionar agentflow + gerar secrets Streamlit" -ForegroundColor Cyan
+    Write-Host "==> Provisionar agentflow + gerar secrets Streamlit (modo flowise)" -ForegroundColor Cyan
     Push-Location $ScriptDir
     try {
         $args = @(
@@ -70,6 +48,7 @@ if ($FlowiseUrl) {
         $secrets = Join-Path $ScriptDir "streamlit\.streamlit\cloud-secrets.toml"
         Write-Host ""
         Write-Host "Cole em https://share.streamlit.io -> seu app -> Settings -> Secrets" -ForegroundColor Green
+        Write-Host "Defina CHAT_BACKEND=flowise no arquivo gerado." -ForegroundColor Yellow
         Write-Host "Arquivo: $secrets" -ForegroundColor Green
         if (Test-Path $secrets) { Start-Process notepad $secrets }
     }
@@ -78,17 +57,9 @@ if ($FlowiseUrl) {
     }
 }
 else {
-    Write-Host "==> 3. Depois do deploy, execute:" -ForegroundColor Cyan
-    Write-Host @"
-
-  cd Flowise/docker
-  .\deploy-flowise-public.ps1 `
-    -FlowiseUrl "https://SUA-URL.onrender.com" `
-    -Email "seu@email.com" `
-    -Password "sua-senha" `
-    -Register
-
-"@ -ForegroundColor White
+    Write-Host "Exemplo (ngrok):" -ForegroundColor Cyan
+    Write-Host "  .\expose-flowise-ngrok.ps1" -ForegroundColor White
+    Write-Host "  .\deploy-flowise-public.ps1 -FlowiseUrl `"https://....ngrok-free.app`" -SkipProvision" -ForegroundColor White
 }
 
 Write-Host ""

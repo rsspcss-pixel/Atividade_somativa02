@@ -28,10 +28,12 @@ $ScriptDir = $PSScriptRoot
 if (-not $ScriptDir) { $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 $SecretKeys = @(
+    "CHAT_BACKEND",
     "FLOWISE_API_URL",
     "FLOWISE_API_TOKEN",
     "CHROMA_ENABLED",
     "OPENAI_API_KEY",
+    "OPENAI_CHAT_MODEL",
     "OPENAI_EMBEDDING_MODEL",
     "APP_ENV",
     "GUARDRAILS_ENABLED",
@@ -94,21 +96,35 @@ try {
     $vars = Read-DotEnv $envPath
     if ($Cloud) {
         $vars["CHROMA_ENABLED"] = "0"
+        if (-not $vars.ContainsKey("CHAT_BACKEND") -or -not $vars["CHAT_BACKEND"].Trim()) {
+            $vars["CHAT_BACKEND"] = "openai"
+        }
     } elseif (-not $vars.ContainsKey("CHROMA_ENABLED")) {
         $vars["CHROMA_ENABLED"] = "0"
     }
 
+    $backend = if ($vars.ContainsKey("CHAT_BACKEND")) { $vars["CHAT_BACKEND"].Trim().ToLower() } else { "auto" }
+    if ($Cloud -and ($backend -eq "openai" -or $backend -eq "auto")) {
+        $backend = "openai"
+    }
+
     $missing = @()
-    foreach ($required in @("FLOWISE_API_URL", "FLOWISE_API_TOKEN")) {
-        if (-not $vars.ContainsKey($required) -or -not $vars[$required].Trim()) {
-            $missing += $required
+    if ($backend -eq "openai") {
+        if (-not $vars.ContainsKey("OPENAI_API_KEY") -or -not $vars["OPENAI_API_KEY"].Trim()) {
+            $missing += "OPENAI_API_KEY"
+        }
+    } else {
+        foreach ($required in @("FLOWISE_API_URL", "FLOWISE_API_TOKEN")) {
+            if (-not $vars.ContainsKey($required) -or -not $vars[$required].Trim()) {
+                $missing += $required
+            }
         }
     }
     if ($missing.Count -gt 0) {
         throw "Variaveis obrigatorias em ${EnvFile}: $($missing -join ', ')"
     }
 
-    if ($vars["FLOWISE_API_TOKEN"] -match "INSIRA_UM_CODIGO_AQUI") {
+    if ($vars.ContainsKey("FLOWISE_API_TOKEN") -and $vars["FLOWISE_API_TOKEN"] -match "INSIRA_UM_CODIGO_AQUI") {
         throw "FLOWISE_API_TOKEN ainda e placeholder em ${EnvFile}. Use local-dev (dev) ou uma API key real."
     }
 
@@ -129,10 +145,10 @@ try {
     $lines | Set-Content -LiteralPath $outPath -Encoding UTF8
     Write-Host "OK: $outPath" -ForegroundColor Green
 
-    if ($Cloud -and $vars["FLOWISE_API_URL"] -match "^(http://flowise|http://localhost|http://127\.0\.0\.1)") {
+    if ($Cloud -and $backend -eq "flowise" -and $vars["FLOWISE_API_URL"] -match "^(http://flowise|http://localhost|http://127\.0\.0\.1)") {
         Write-Host ""
         Write-Host "AVISO: FLOWISE_API_URL parece URL interna Docker." -ForegroundColor Yellow
-        Write-Host "       No Streamlit Cloud use a URL publica do Flowise (HTTPS)." -ForegroundColor Yellow
+        Write-Host "       No Streamlit Cloud prefira CHAT_BACKEND=openai + OPENAI_API_KEY." -ForegroundColor Yellow
     }
 }
 finally {

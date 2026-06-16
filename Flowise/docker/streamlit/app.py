@@ -17,10 +17,13 @@ try:
 except Exception:
     pass
 
-FLOWISE_READY = True
-FLOWISE_CONFIG_ERROR = ""
+CHAT_READY = True
+CHAT_CONFIG_ERROR = ""
+CHAT_BACKEND = "flowise"
 FLOWISE_API_URL = ""
 FLOWISE_API_TOKEN = ""
+OPENAI_API_KEY = ""
+OPENAI_CHAT_MODEL = "gpt-4o-mini"
 REQUEST_CONNECT_TIMEOUT_SECONDS = 10
 REQUEST_READ_TIMEOUT_SECONDS = 600
 DUCKDB_DATABASE_PATH = "data/compras.duckdb"
@@ -35,6 +38,7 @@ CHAT_PROMPT_PREFIX = ""
 
 try:
     from config import (
+        CHAT_BACKEND,
         CHROMA_COLLECTION_NAME,
         CHROMA_ENABLED,
         CHROMA_PERSIST_DIRECTORY,
@@ -44,6 +48,7 @@ try:
         FLOWISE_API_URL,
         KNOWLEDGE_TXT_DIR,
         OPENAI_API_KEY,
+        OPENAI_CHAT_MODEL,
         OPENAI_EMBEDDING_MODEL,
         REQUEST_CONNECT_TIMEOUT_SECONDS,
         REQUEST_READ_TIMEOUT_SECONDS,
@@ -59,8 +64,9 @@ try:
         GUARDRAILS_LINK_ALLOWLIST,
     )
 except Exception as exc:
-    FLOWISE_READY = False
-    FLOWISE_CONFIG_ERROR = str(exc)
+    CHAT_READY = False
+    CHAT_CONFIG_ERROR = str(exc)
+    CHAT_BACKEND = "flowise"
     APP_ENV = "demo"
     GUARDRAILS_ENABLED = True
     GUARDRAILS_MAX_INPUT_CHARS = 4000
@@ -72,8 +78,8 @@ except Exception as exc:
     GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 
 _CHAT_RATE_LIMITER = guardrails.RateLimiter(
-    max_requests=GUARDRAILS_RATE_LIMIT if FLOWISE_READY else 20,
-    window_seconds=float(GUARDRAILS_RATE_WINDOW_SECONDS if FLOWISE_READY else 60),
+    max_requests=GUARDRAILS_RATE_LIMIT if CHAT_READY else 20,
+    window_seconds=float(GUARDRAILS_RATE_WINDOW_SECONDS if CHAT_READY else 60),
 )
 
 
@@ -171,8 +177,8 @@ def apply_output_guardrails(answer: str) -> str:
 
 
 def query_flowise(question: str, placeholder, chat_id: str | None = None):
-    if not FLOWISE_READY:
-        return "Flowise nao configurado. Ajuste o .env para habilitar o chat."
+    if not CHAT_READY:
+        return "Chat nao configurado. Ajuste st.secrets ou o .env local."
 
     headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
     payload: dict[str, object] = {
@@ -209,6 +215,25 @@ def query_flowise(question: str, placeholder, chat_id: str | None = None):
         except ValueError:
             answer = extract_answer(response.text)
         return fake_stream(answer, placeholder)
+
+
+def query_chat(question: str, placeholder, chat_id: str | None = None):
+    if not CHAT_READY:
+        return "Chat nao configurado. Ajuste st.secrets ou o .env local."
+    if CHAT_BACKEND == "openai":
+        from cloud_chat import query_openai_chat
+
+        return query_openai_chat(
+            question,
+            placeholder,
+            api_key=OPENAI_API_KEY,
+            model=OPENAI_CHAT_MODEL,
+            knowledge_dir=KNOWLEDGE_TXT_DIR,
+            connect_timeout=REQUEST_CONNECT_TIMEOUT_SECONDS or 10,
+            read_timeout=REQUEST_READ_TIMEOUT_SECONDS or 120,
+            cancel_check=lambda: st.session_state.cancel_requested,
+        )
+    return query_flowise(question, placeholder, chat_id=chat_id)
 
 
 def ensure_state():
@@ -352,20 +377,22 @@ def render_chat_tab():
                         llm_prompt = gate.text
                         if "input_redacted" in gate.actions:
                             st.caption("Dados pessoais na mensagem foram mascarados antes do envio ao modelo.")
-                        answer = query_flowise(llm_prompt, placeholder, chat_id=active_chat["id"])
+                        answer = query_chat(llm_prompt, placeholder, chat_id=active_chat["id"])
                         if st.session_state.cancel_requested:
                             answer = "Requisicao cancelada no frontend."
                         else:
                             answer = apply_output_guardrails(answer)
                         placeholder.markdown(answer)
                 except requests.exceptions.Timeout:
+                    backend_label = "OpenAI" if CHAT_BACKEND == "openai" else "Flowise"
                     answer = (
-                        "Flowise demorou para responder e excedeu o timeout configurado. "
-                        "Aumente REQUEST_READ_TIMEOUT_SECONDS no .env ou revise os nos do fluxo."
+                        f"{backend_label} demorou para responder e excedeu o timeout configurado. "
+                        "Aumente REQUEST_READ_TIMEOUT_SECONDS nos secrets ou no .env."
                     )
                     placeholder.markdown(answer)
                 except Exception as exc:
-                    answer = f"Erro ao consultar Flowise: {exc}"
+                    backend_label = "OpenAI" if CHAT_BACKEND == "openai" else "Flowise"
+                    answer = f"Erro ao consultar {backend_label}: {exc}"
                     placeholder.markdown(answer)
                 finally:
                     st.session_state.is_processing = False
@@ -1072,11 +1099,15 @@ with st.sidebar:
     else:
         st.caption("Guardrails: desativados (GUARDRAILS_ENABLED=0)")
 
-if not FLOWISE_READY:
+if not CHAT_READY:
     st.warning(
-        "Chat indisponivel: configure FLOWISE_API_URL e FLOWISE_API_TOKEN em st.secrets ou no ambiente. "
-        f"Detalhe tecnico: {FLOWISE_CONFIG_ERROR}"
+        "Chat indisponivel: no Streamlit Cloud defina CHAT_BACKEND=openai e OPENAI_API_KEY em Settings > Secrets. "
+        f"Detalhe tecnico: {CHAT_CONFIG_ERROR}"
     )
+elif CHAT_BACKEND == "openai":
+    st.caption("Chat: OpenAI direto (Streamlit Cloud) — conhecimento Lumina embutido.")
+else:
+    st.caption("Chat: Flowise (Docker local).")
 
 _tab_labels = ["Chat", "Analytics (DuckDB + pandas)", "ML (risco UCI)"]
 if CHROMA_ENABLED:
@@ -1093,7 +1124,7 @@ if CHROMA_ENABLED:
         render_chroma_tab()
 
 with _tabs[0]:
-    user_prompt = st.chat_input("Digite sua mensagem", disabled=not FLOWISE_READY)
+    user_prompt = st.chat_input("Digite sua mensagem", disabled=not CHAT_READY)
     if user_prompt:
         st.session_state.pending_prompt = user_prompt
         st.rerun()

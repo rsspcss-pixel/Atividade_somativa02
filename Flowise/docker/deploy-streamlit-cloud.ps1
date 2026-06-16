@@ -98,7 +98,7 @@ try {
     Write-Step "Validando Python"
     Push-Location $StreamlitDir
     try {
-        python -m py_compile app.py config.py guardrails.py chroma_rag.py
+        python -m py_compile app.py config.py guardrails.py chroma_rag.py knowledge_base.py cloud_chat.py
         if ($LASTEXITCODE -ne 0) { throw "py_compile falhou." }
         Write-Host "    Sintaxe OK." -ForegroundColor Green
     }
@@ -130,12 +130,14 @@ try {
       - Main file path: Flowise/docker/streamlit/app.py
       - Branch: main (ou a sua branch de deploy)
 
-    Secrets (Settings > Secrets)
-      - Abra: docker/streamlit/.streamlit/cloud-secrets.toml
-      - Cole o conteudo inteiro no painel do app
+    Secrets (Settings > Secrets) — Streamlit Cloud
+      - CHAT_BACKEND = openai
+      - OPENAI_API_KEY = sk-... (platform.openai.com)
+      - OPENAI_CHAT_MODEL = gpt-4o-mini
+      - CHROMA_ENABLED = 0
 
-    FLOWISE_API_URL
-      - Deve ser URL publica HTTPS do Flowise (nao http://flowise:3000)
+    Modelo: docker/streamlit/.streamlit/secrets.toml.example
+      - Ou cloud-secrets.toml gerado por setup-secrets.ps1 -Cloud
 
     Apos o deploy
       - Teste o chat na aba principal

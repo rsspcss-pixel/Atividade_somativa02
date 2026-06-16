@@ -1,5 +1,5 @@
-# Render Blueprint — Flowise publico (Streamlit Cloud)
-# Dashboard: New -> Blueprint -> repo Atividade_somativa02
+# Render Blueprint — OPCIONAL (nao necessario para share.streamlit.io)
+# Deploy padrao: Flowise/docs/deploy-streamlit-cloud.md
 
 services:
   - type: web
