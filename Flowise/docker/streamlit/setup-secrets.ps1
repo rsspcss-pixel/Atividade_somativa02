@@ -99,6 +99,8 @@ try {
         if (-not $vars.ContainsKey("CHAT_BACKEND") -or -not $vars["CHAT_BACKEND"].Trim()) {
             $vars["CHAT_BACKEND"] = "openai"
         }
+    } elseif (-not $vars.ContainsKey("CHAT_BACKEND") -or -not $vars["CHAT_BACKEND"].Trim()) {
+        $vars["CHAT_BACKEND"] = "flowise"
     } elseif (-not $vars.ContainsKey("CHROMA_ENABLED")) {
         $vars["CHROMA_ENABLED"] = "0"
     }
