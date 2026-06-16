@@ -8,6 +8,8 @@ import pandas as pd
 import requests
 import streamlit as st
 
+st.set_page_config(page_title="Assistente de negociacao", page_icon="💬", layout="wide")
+
 import guardrails
 
 import demo_assets
@@ -19,7 +21,7 @@ except Exception:
 
 CHAT_READY = True
 CHAT_CONFIG_ERROR = ""
-CHAT_BACKEND = "flowise"
+CHAT_BACKEND = "openai"
 FLOWISE_API_URL = ""
 FLOWISE_API_TOKEN = ""
 OPENAI_API_KEY = ""
@@ -28,54 +30,53 @@ REQUEST_CONNECT_TIMEOUT_SECONDS = 10
 REQUEST_READ_TIMEOUT_SECONDS = 600
 DUCKDB_DATABASE_PATH = "data/compras.duckdb"
 DUCKDB_SOURCE_DIR = "data"
-OPENAI_API_KEY = ""
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
 CHROMA_ENABLED = False
 CHROMA_PERSIST_DIRECTORY = "data/chroma"
 CHROMA_COLLECTION_NAME = "negociacao_conhecimento"
 KNOWLEDGE_TXT_DIR = "data/documentos_negociacao"
 CHAT_PROMPT_PREFIX = ""
+APP_ENV = "demo"
+GUARDRAILS_ENABLED = True
+GUARDRAILS_MAX_INPUT_CHARS = 4000
+GUARDRAILS_BLOCK_INJECTION = True
+GUARDRAILS_BLOCK_ON_PII = False
+GUARDRAILS_APPEND_DISCLAIMER = True
+GUARDRAILS_RATE_LIMIT = 20
+GUARDRAILS_RATE_WINDOW_SECONDS = 60
+GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 
 try:
-    from config import (
-        CHAT_BACKEND,
-        CHROMA_COLLECTION_NAME,
-        CHROMA_ENABLED,
-        CHROMA_PERSIST_DIRECTORY,
-        DUCKDB_DATABASE_PATH,
-        DUCKDB_SOURCE_DIR,
-        FLOWISE_API_TOKEN,
-        FLOWISE_API_URL,
-        KNOWLEDGE_TXT_DIR,
-        OPENAI_API_KEY,
-        OPENAI_CHAT_MODEL,
-        OPENAI_EMBEDDING_MODEL,
-        REQUEST_CONNECT_TIMEOUT_SECONDS,
-        REQUEST_READ_TIMEOUT_SECONDS,
-        CHAT_PROMPT_PREFIX,
-        APP_ENV,
-        GUARDRAILS_ENABLED,
-        GUARDRAILS_MAX_INPUT_CHARS,
-        GUARDRAILS_BLOCK_INJECTION,
-        GUARDRAILS_BLOCK_ON_PII,
-        GUARDRAILS_APPEND_DISCLAIMER,
-        GUARDRAILS_RATE_LIMIT,
-        GUARDRAILS_RATE_WINDOW_SECONDS,
-        GUARDRAILS_LINK_ALLOWLIST,
-    )
+    import config
+
+    config.initialize()
+    CHAT_BACKEND = config.CHAT_BACKEND
+    CHROMA_COLLECTION_NAME = config.CHROMA_COLLECTION_NAME
+    CHROMA_ENABLED = config.CHROMA_ENABLED
+    CHROMA_PERSIST_DIRECTORY = config.CHROMA_PERSIST_DIRECTORY
+    DUCKDB_DATABASE_PATH = config.DUCKDB_DATABASE_PATH
+    DUCKDB_SOURCE_DIR = config.DUCKDB_SOURCE_DIR
+    FLOWISE_API_TOKEN = config.FLOWISE_API_TOKEN
+    FLOWISE_API_URL = config.FLOWISE_API_URL
+    KNOWLEDGE_TXT_DIR = config.KNOWLEDGE_TXT_DIR
+    OPENAI_API_KEY = config.OPENAI_API_KEY
+    OPENAI_CHAT_MODEL = config.OPENAI_CHAT_MODEL
+    OPENAI_EMBEDDING_MODEL = config.OPENAI_EMBEDDING_MODEL
+    REQUEST_CONNECT_TIMEOUT_SECONDS = config.REQUEST_CONNECT_TIMEOUT_SECONDS
+    REQUEST_READ_TIMEOUT_SECONDS = config.REQUEST_READ_TIMEOUT_SECONDS
+    CHAT_PROMPT_PREFIX = config.CHAT_PROMPT_PREFIX
+    APP_ENV = config.APP_ENV
+    GUARDRAILS_ENABLED = config.GUARDRAILS_ENABLED
+    GUARDRAILS_MAX_INPUT_CHARS = config.GUARDRAILS_MAX_INPUT_CHARS
+    GUARDRAILS_BLOCK_INJECTION = config.GUARDRAILS_BLOCK_INJECTION
+    GUARDRAILS_BLOCK_ON_PII = config.GUARDRAILS_BLOCK_ON_PII
+    GUARDRAILS_APPEND_DISCLAIMER = config.GUARDRAILS_APPEND_DISCLAIMER
+    GUARDRAILS_RATE_LIMIT = config.GUARDRAILS_RATE_LIMIT
+    GUARDRAILS_RATE_WINDOW_SECONDS = config.GUARDRAILS_RATE_WINDOW_SECONDS
+    GUARDRAILS_LINK_ALLOWLIST = config.GUARDRAILS_LINK_ALLOWLIST
 except Exception as exc:
     CHAT_READY = False
     CHAT_CONFIG_ERROR = str(exc)
-    CHAT_BACKEND = "flowise"
-    APP_ENV = "demo"
-    GUARDRAILS_ENABLED = True
-    GUARDRAILS_MAX_INPUT_CHARS = 4000
-    GUARDRAILS_BLOCK_INJECTION = True
-    GUARDRAILS_BLOCK_ON_PII = False
-    GUARDRAILS_APPEND_DISCLAIMER = True
-    GUARDRAILS_RATE_LIMIT = 20
-    GUARDRAILS_RATE_WINDOW_SECONDS = 60
-    GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 
 _CHAT_RATE_LIMITER = guardrails.RateLimiter(
     max_requests=GUARDRAILS_RATE_LIMIT if CHAT_READY else 20,
@@ -953,7 +954,6 @@ def render_chroma_tab():
                 st.error(f"Falha na busca: {exc}{_openai_401_hint(str(exc))}")
 
 
-st.set_page_config(page_title="Assistente de negociacao", page_icon="💬", layout="wide")
 ensure_state()
 
 st.markdown(
@@ -1101,7 +1101,8 @@ with st.sidebar:
 
 if not CHAT_READY:
     st.warning(
-        "Chat indisponivel: no Streamlit Cloud defina CHAT_BACKEND=openai e OPENAI_API_KEY em Settings > Secrets. "
+        "Chat indisponivel. No [Streamlit Cloud](https://share.streamlit.io) abra **Settings → Secrets** e cole:\n\n"
+        "```toml\nCHAT_BACKEND = \"openai\"\nOPENAI_API_KEY = \"sk-...\"\nOPENAI_CHAT_MODEL = \"gpt-4o-mini\"\nCHROMA_ENABLED = \"0\"\n```\n\n"
         f"Detalhe tecnico: {CHAT_CONFIG_ERROR}"
     )
 elif CHAT_BACKEND == "openai":
