@@ -1162,8 +1162,10 @@ with st.sidebar:
 
 if not CHAT_READY:
     st.warning(
-        "Chat indisponivel. No [Streamlit Cloud](https://share.streamlit.io) abra **Settings → Secrets** e cole:\n\n"
-        "```toml\nCHAT_BACKEND = \"openai\"\nOPENAI_API_KEY = \"sk-...\"\nOPENAI_CHAT_MODEL = \"gpt-4o-mini\"\nCHROMA_ENABLED = \"0\"\n```\n\n"
+        "Chat indisponivel. No [Streamlit Cloud](https://share.streamlit.io) abra **Settings → Secrets** "
+        "e cole (remova `FLOWISE_*` se existir):\n\n"
+        "```toml\nCHAT_BACKEND = \"openai\"\nOPENAI_API_KEY = \"sk-...\"\n"
+        "OPENAI_CHAT_MODEL = \"gpt-4o-mini\"\nCHROMA_ENABLED = \"0\"\n```\n\n"
         f"Detalhe tecnico: {CHAT_CONFIG_ERROR}"
     )
 elif CHAT_BACKEND == "openai":

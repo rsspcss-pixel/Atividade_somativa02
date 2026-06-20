@@ -51,18 +51,29 @@ def _normalize_secret_env(value: str | None) -> str:
 
 
 def _is_streamlit_cloud() -> bool:
-    markers = (
+    """Detecta Streamlit Community Cloud (nao confundir com Docker headless local)."""
+    env_markers = (
         os.getenv("STREAMLIT_RUNTIME_ENVIRONMENT") == "cloud",
         bool(os.getenv("STREAMLIT_SHARING_BASE_URL")),
-        "streamlit.app" in (os.getenv("HOST") or "").lower(),
     )
-    if any(markers):
+    if any(env_markers):
         return True
+
+    host = (os.getenv("HOST") or "").lower()
+    if "streamlit.app" in host or "share.streamlit.io" in host:
+        return True
+
     try:
         import streamlit as st
 
-        if hasattr(st, "context") and getattr(st.context, "url", ""):
-            return "streamlit.app" in str(st.context.url)
+        ctx = getattr(st, "context", None)
+        url = str(getattr(ctx, "url", "") or "")
+        if any(token in url for token in ("streamlit.app", "share.streamlit.io")):
+            return True
+        # Heuristica: app publicado sem Flowise Docker na mesma rede
+        if getattr(ctx, "is_embedded", False) is False and url.startswith("https://"):
+            # Evita falso positivo local HTTPS; Cloud quase sempre streamlit.app
+            pass
     except Exception:
         pass
     return False
@@ -70,6 +81,11 @@ def _is_streamlit_cloud() -> bool:
 
 def _get_config_value(name: str, default: str = "") -> str:
     """Le st.secrets (Streamlit Cloud) ou variavel de ambiente."""
+    # Streamlit Cloud injeta secrets tambem como variaveis de ambiente.
+    env_val = _normalize_secret_env(os.getenv(name))
+    if env_val:
+        return env_val
+
     try:
         import streamlit as st
 
@@ -78,6 +94,13 @@ def _get_config_value(name: str, default: str = "") -> str:
             raw = secrets[name]
             if raw is not None and str(raw).strip():
                 return _normalize_secret_env(str(raw))
+        # Suporte a secrets aninhados: [section] key = value
+        try:
+            flat = dict(secrets)
+            if name in flat and flat[name] is not None and str(flat[name]).strip():
+                return _normalize_secret_env(str(flat[name]))
+        except Exception:
+            pass
     except Exception:
         pass
     return _normalize_secret_env(os.getenv(name, default))
@@ -113,6 +136,14 @@ def _is_internal_flowise_url(url: str) -> bool:
     )
 
 
+def _cloud_openai_required_message() -> str:
+    return (
+        "Streamlit Cloud: use CHAT_BACKEND=openai e OPENAI_API_KEY nos Secrets. "
+        "Remova FLOWISE_API_URL e FLOWISE_API_TOKEN (validos apenas no Docker local). "
+        "Modelo: Flowise/docker/streamlit/.streamlit/secrets.toml.example"
+    )
+
+
 def _resolve_chat_backend() -> str:
     on_cloud = _is_streamlit_cloud()
     requested = _get_config_value("CHAT_BACKEND", "").strip().lower()
@@ -122,31 +153,33 @@ def _resolve_chat_backend() -> str:
     flowise_url = _get_config_value("FLOWISE_API_URL")
     flowise_token = _get_config_value("FLOWISE_API_TOKEN")
     openai_key = _get_config_value("OPENAI_API_KEY")
+    flowise_usable = bool(
+        flowise_url and flowise_token and not _is_internal_flowise_url(flowise_url)
+    )
+
+    # Flowise indisponivel: preferir OpenAI se a chave existir
+    if requested == "flowise" and not flowise_usable:
+        if openai_key:
+            return "openai"
+        if on_cloud:
+            raise ValueError(_cloud_openai_required_message())
+
+    if on_cloud:
+        if requested == "flowise" and flowise_usable:
+            return "flowise"
+        if openai_key or requested in ("openai", "auto", ""):
+            return "openai"
+        raise ValueError(_cloud_openai_required_message())
 
     if requested == "openai":
         return "openai"
     if requested == "flowise":
-        if on_cloud and _is_internal_flowise_url(flowise_url):
-            raise ValueError(
-                "CHAT_BACKEND=flowise nao funciona no Streamlit Cloud com URL Docker interna. "
-                "Use CHAT_BACKEND=openai e OPENAI_API_KEY nos Secrets."
-            )
         return "flowise"
 
-    # auto
-    if on_cloud:
-        if openai_key:
-            return "openai"
-        if flowise_url and flowise_token and not _is_internal_flowise_url(flowise_url):
-            return "flowise"
-        raise ValueError(
-            "Chat nao configurado no Streamlit Cloud. "
-            "Defina OPENAI_API_KEY e CHAT_BACKEND=openai em Settings > Secrets."
-        )
-
+    # auto (local)
     if openai_key and (not flowise_url or _is_internal_flowise_url(flowise_url)):
         return "openai"
-    if flowise_url and flowise_token:
+    if flowise_usable:
         return "flowise"
     if openai_key:
         return "openai"
@@ -220,6 +253,13 @@ def initialize_chat() -> None:
         FLOWISE_API_URL = _required("FLOWISE_API_URL")
         FLOWISE_API_TOKEN = _required("FLOWISE_API_TOKEN")
     else:
+        if not _get_config_value("OPENAI_API_KEY"):
+            if _is_streamlit_cloud():
+                raise ValueError(_cloud_openai_required_message())
+            raise ValueError(
+                "Missing required config: OPENAI_API_KEY. "
+                "Defina em st.secrets (Streamlit Cloud > Settings > Secrets) ou no ambiente."
+            )
         OPENAI_API_KEY = _required("OPENAI_API_KEY")
         OPENAI_CHAT_MODEL = _get_config_value("OPENAI_CHAT_MODEL", "gpt-4o-mini") or "gpt-4o-mini"
 
