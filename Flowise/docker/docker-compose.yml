@@ -230,6 +230,7 @@ services:
         environment:
             - CHAT_BACKEND=flowise
             - CHROMA_ENABLED=0
+            - RUNNING_IN_DOCKER=1
         ports:
             - '${STREAMLIT_PORT:-8502}:8501'
         volumes:
