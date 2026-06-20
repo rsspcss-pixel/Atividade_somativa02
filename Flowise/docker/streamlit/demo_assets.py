@@ -18,12 +18,23 @@ if str(APP_ROOT) not in sys.path:
     sys.path.insert(0, str(APP_ROOT))
 
 
+def _candidate_data_dirs(source_dir: Path | None = None) -> list[Path]:
+    if source_dir is not None:
+        return [source_dir]
+    return [DATA_DIR, resolve_app_path("data")]
+
+
 def dataset_files(source_dir: Path | None = None) -> list[Path]:
-    root = source_dir or DATA_DIR
-    cosmeticos = sorted(root.glob("insumos_cosmeticos_*.csv"))
-    if cosmeticos:
-        return cosmeticos
-    return sorted(root.glob("produtos_*.csv"))
+    for root in _candidate_data_dirs(source_dir):
+        if not root.is_dir():
+            continue
+        cosmeticos = sorted(root.glob("insumos_cosmeticos_*.csv"))
+        if cosmeticos:
+            return cosmeticos
+        produtos = sorted(root.glob("produtos_*.csv"))
+        if produtos:
+            return produtos
+    return []
 
 
 def ensure_dataset(*, rows: int = 5000, files: int = 5) -> list[Path]:

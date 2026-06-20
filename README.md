@@ -217,7 +217,7 @@ Documentação completa: [`streamlit/.env.example`](Flowise/docker/streamlit/.en
 1. **LM Studio obrigatório no chat local** — Sem o Nemotron carregado na porta 1234, o Flowise retorna erro de conexão.
 2. **Latência do LLM local** — Modelos GGUF locais são mais lentos que APIs cloud; o agentflow foi otimizado (prompt reduzido, tools desligadas por padrão, thinking do Nemotron desativado via `configure-lmstudio-nemotron.ps1`).
 3. **Tools no agente local** — Custom tools (`buscar_insumo_duckdb`, `classificar_risco_renegociacao`) estão desabilitadas no agentflow por padrão (`LOCAL_ATTACH_TOOLS=False`) para reduzir latência; consultas numéricas usam as abas DuckDB e ML no Streamlit.
-4. **Streamlit Cloud sem Flowise** — No Cloud não há URL interna `http://flowise:3000`; use `CHAT_BACKEND=openai`.
+4. **Streamlit Cloud sem Flowise** — No Cloud não há URL interna `http://flowise:3000`; use `CHAT_BACKEND=openai`. Configure **branch `main`** (não `master`) e main file `Flowise/docker/streamlit/app.py`.
 5. **Dados fictícios** — CSVs e documentos são simulados para demonstração acadêmica.
 6. **DeepEval** — Testes completos dependem de LM Studio + Flowise rodando; `-DryRun` valida apenas métricas.
 7. **Monorepo Flowise** — O diretório `Flowise/packages/` contém o código upstream do Flowise; a entrega da atividade concentra-se em `Flowise/docker/`.

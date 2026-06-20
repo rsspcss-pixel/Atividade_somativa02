@@ -107,10 +107,11 @@ except Exception as exc:
     CHAT_READY = False
     CHAT_CONFIG_ERROR = str(exc)
 
+DEMO_ASSETS_ERROR = ""
 try:
     demo_assets.ensure_all()
-except Exception:
-    pass
+except Exception as exc:
+    DEMO_ASSETS_ERROR = str(exc)
 
 _CHAT_RATE_LIMITER = guardrails.RateLimiter(
     max_requests=GUARDRAILS_RATE_LIMIT if CHAT_READY else 20,
@@ -391,16 +392,15 @@ def find_last_user_message(messages):
 
 
 def get_dataset_files() -> list[Path]:
-    source_dir = resolve_app_path(DUCKDB_SOURCE_DIR)
-
-    def _scan() -> list[Path]:
-        cosmeticos = sorted(source_dir.glob("insumos_cosmeticos_*.csv"))
-        return cosmeticos or sorted(source_dir.glob("produtos_*.csv"))
-
-    files = _scan()
+    files = demo_assets.dataset_files(resolve_app_path(DUCKDB_SOURCE_DIR))
     if not files:
-        demo_assets.ensure_dataset()
-        files = _scan()
+        files = demo_assets.dataset_files(DATA_DIR)
+    if not files:
+        try:
+            demo_assets.ensure_dataset()
+        except Exception:
+            pass
+        files = demo_assets.dataset_files(DATA_DIR)
     return files
 
 
@@ -495,9 +495,12 @@ def render_duckdb_tab():
     all_files = get_dataset_files()
     if not all_files:
         st.warning(
-            f"Nenhum dataset encontrado em `{DUCKDB_SOURCE_DIR}`. "
-            "Execute `python generate_mock_data.py` na pasta do Streamlit para gerar os CSVs ficticios."
+            f"Nenhum dataset encontrado em `{DUCKDB_SOURCE_DIR}` (app: `{DATA_DIR}`). "
+            "Os CSVs devem estar em `Flowise/docker/streamlit/data/` no repositorio; "
+            "o app tenta gerar automaticamente na inicializacao."
         )
+        if DEMO_ASSETS_ERROR:
+            st.caption(f"Detalhe ao preparar dados: {DEMO_ASSETS_ERROR}")
         return
 
     default_files = all_files[:3]
@@ -1177,6 +1180,13 @@ with st.sidebar:
     st.divider()
     st.caption(f"DuckDB: {DUCKDB_DATABASE_PATH}")
     st.caption(f"Fonte CSV: {DUCKDB_SOURCE_DIR}")
+    _csv_count = len(
+        demo_assets.dataset_files(DATA_DIR)
+        or demo_assets.dataset_files(resolve_app_path(DUCKDB_SOURCE_DIR))
+    )
+    st.caption(f"CSVs disponiveis: {_csv_count} | App root: {DATA_DIR.parent}")
+    if DEMO_ASSETS_ERROR:
+        st.caption(f"Aviso dados/ML: {DEMO_ASSETS_ERROR}")
     if CHROMA_ENABLED:
         st.caption(f"Chroma: {CHROMA_PERSIST_DIRECTORY}")
     if GUARDRAILS_ENABLED:
@@ -1194,7 +1204,8 @@ if not CHAT_READY:
         "```toml\nCHAT_BACKEND = \"openai\"\nOPENAI_API_KEY = \"sk-...\"\n"
         "OPENAI_CHAT_MODEL = \"gpt-4o-mini\"\nCHROMA_ENABLED = \"0\"\n```\n\n"
         f"Detalhe tecnico: {CHAT_CONFIG_ERROR}\n\n"
-        f"Versao config: `{APP_CONFIG_VERSION}` (se nao for `2026.06.20-cloud4`, faca **Reboot app** no Cloud)."
+        f"Versao config: `{APP_CONFIG_VERSION}` (esperado `2026.06.20-cloud5`). "
+        "Confirme **Branch: main** e **Main file:** `Flowise/docker/streamlit/app.py`, depois **Reboot app**."
     )
 elif CHAT_BACKEND == "openai":
     st.caption(f"Chat: OpenAI direto (Streamlit Cloud) — config `{APP_CONFIG_VERSION}`.")

@@ -14,7 +14,7 @@ Faca push do repositorio `Atividade_somativa02` para o GitHub (branch `main`).
 2. **New app** → conecte o repositorio
 3. Configure:
    - **Main file path:** `Flowise/docker/streamlit/app.py`
-   - **Branch:** `main`
+   - **Branch:** `main` (**nao use `master`** — branch antigo sem chat OpenAI e paths corretos)
 
 ### 3. Secrets (Settings → Secrets)
 
@@ -56,7 +56,8 @@ Gera `cloud-secrets.toml` a partir do `.env` (se `CHAT_BACKEND=openai` e `OPENAI
 
 | Problema | Solucao |
 |----------|---------|
-| Chat indisponivel | Confirme `CHAT_BACKEND=openai` e `OPENAI_API_KEY` nos Secrets |
+| Chat indisponivel (pede FLOWISE) | Branch errado (`master`) ou deploy desatualizado — use **`main`**, versao config `2026.06.20-cloud5`, **Reboot app** |
+| Chat indisponivel | Confirme `CHAT_BACKEND=openai` e `OPENAI_API_KEY` nos Secrets; remova `FLOWISE_*` |
 | Erro 401 OpenAI | Chave invalida ou sem credito em platform.openai.com |
 | Dataset ausente | CSVs e modelo ML ja estao no repo; o app prepara na inicializacao |
 | Quero Flowise no cloud | Opcional: [deploy-flowise-public.md](deploy-flowise-public.md) (Render/ngrok) |

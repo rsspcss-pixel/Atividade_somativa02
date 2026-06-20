@@ -30,7 +30,7 @@ GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 
 _INITIALIZED = False
 _PATHS_INITIALIZED = False
-APP_CONFIG_VERSION = "2026.06.20-cloud4"
+APP_CONFIG_VERSION = "2026.06.20-cloud5"
 
 
 def _running_in_docker() -> bool:
@@ -153,6 +153,12 @@ def _resolve_chat_backend() -> str:
     flowise_url = _get_config_value("FLOWISE_API_URL")
     flowise_token = _get_config_value("FLOWISE_API_TOKEN")
     requested = _get_config_value("CHAT_BACKEND", "").strip().lower() or "auto"
+
+    # Streamlit Cloud nunca usa Flowise (servico so existe no Docker local).
+    if _is_streamlit_cloud():
+        if openai_key:
+            return "openai"
+        raise ValueError(_cloud_openai_required_message())
 
     local_flowise_ok = bool(
         flowise_url
