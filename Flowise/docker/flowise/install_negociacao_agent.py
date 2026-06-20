@@ -18,6 +18,7 @@ from pathlib import Path
 from agent_config import (
     AGENT_FLOW_NAME,
     CHATFLOW_ID,
+    LOCAL_ATTACH_TOOLS,
     TOOL_NAMES,
     build_flow_data,
     build_system_message,
@@ -90,20 +91,32 @@ def get_workspace_and_credential(conn: sqlite3.Connection) -> tuple[str, str | N
     return workspace_id, cred[0] if cred else None
 
 
+def clear_chatflow_api_key(conn: sqlite3.Connection) -> None:
+    """Garante que o chatflow aceite FLOWISE_API_TOKEN=local-dev (sem API key vinculada)."""
+    conn.execute(
+        "UPDATE chat_flow SET apikeyid = NULL, updatedDate = datetime('now') WHERE id = ?",
+        (CHATFLOW_ID,),
+    )
+
+
 def upsert_chatflow(
     conn: sqlite3.Connection,
     workspace_id: str,
     credential_id: str | None,
     *,
     cloud: bool = False,
+    tool_ids: dict[str, str] | None = None,
 ) -> None:
-    flow_data = json.dumps(build_flow_data(credential_id, cloud=cloud), ensure_ascii=False)
+    flow_data = json.dumps(
+        build_flow_data(credential_id, cloud=cloud, tool_ids=tool_ids),
+        ensure_ascii=False,
+    )
     existing = conn.execute("SELECT id FROM chat_flow WHERE id = ?", (CHATFLOW_ID,)).fetchone()
     if existing:
         conn.execute(
             """
             UPDATE chat_flow SET name = ?, flowData = ?, type = 'AGENTFLOW',
-                   deployed = 1, updatedDate = datetime('now')
+                   deployed = 1, apikeyid = NULL, updatedDate = datetime('now')
             WHERE id = ?
             """,
             (AGENT_FLOW_NAME, flow_data, CHATFLOW_ID),
@@ -111,8 +124,8 @@ def upsert_chatflow(
     else:
         conn.execute(
             """
-            INSERT INTO chat_flow (id, name, flowData, deployed, isPublic, type, workspaceId)
-            VALUES (?, ?, ?, 1, 0, 'AGENTFLOW', ?)
+            INSERT INTO chat_flow (id, name, flowData, deployed, isPublic, type, workspaceId, apikeyid)
+            VALUES (?, ?, ?, 1, 0, 'AGENTFLOW', ?, NULL)
             """,
             (CHATFLOW_ID, AGENT_FLOW_NAME, flow_data, workspace_id),
         )
@@ -136,15 +149,22 @@ def main() -> int:
 
     conn = sqlite3.connect(str(args.db))
     workspace_id, credential_id = get_workspace_and_credential(conn)
-    tool_ids: list[str] = []
-    if not args.cloud:
-        tool_ids = [upsert_tool(conn, workspace_id, name) for name in TOOL_NAMES]
-    upsert_chatflow(conn, workspace_id, credential_id, cloud=args.cloud)
+    tool_id_map: dict[str, str] = {}
+    if not args.cloud and LOCAL_ATTACH_TOOLS:
+        tool_id_map = {name: upsert_tool(conn, workspace_id, name) for name in TOOL_NAMES}
+    upsert_chatflow(
+        conn,
+        workspace_id,
+        credential_id if args.cloud else None,
+        cloud=args.cloud,
+        tool_ids=tool_id_map or None,
+    )
+    clear_chatflow_api_key(conn)
     conn.commit()
     conn.close()
 
-    if tool_ids:
-        print(f"Tools instaladas: {', '.join(f'{n} ({tid})' for n, tid in zip(TOOL_NAMES, tool_ids))}")
+    if tool_id_map:
+        print(f"Tools instaladas: {', '.join(f'{n} ({tid})' for n, tid in tool_id_map.items())}")
     print(f"Agentflow '{AGENT_FLOW_NAME}' pronto (id={CHATFLOW_ID}, cloud={args.cloud})")
     print(f"Prediction URL: http://localhost:3000/api/v1/prediction/{CHATFLOW_ID}")
     print(f"Conhecimento: {len(build_system_message())} chars no system prompt")

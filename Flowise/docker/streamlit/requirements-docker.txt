@@ -1,9 +1,8 @@
-# Stack Docker completo (Streamlit + APIs + eval + Chroma)
+# Stack Docker completo (Streamlit + ML API + Eval API + Chroma + DeepEval)
 -r requirements.txt
-chromadb>=0.4.22
-openai>=1.0.0
-python-dotenv>=1.0.0
-deepeval>=4.0.0
-pytest>=7.0.0
-fastapi>=0.110.0
-uvicorn[standard]>=0.27.0
+chromadb==1.5.8
+openai==2.32.0
+deepeval==4.0.5
+pytest==9.0.3
+fastapi==0.136.3
+uvicorn[standard]==0.46.0

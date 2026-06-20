@@ -115,6 +115,36 @@ def repair_mojibake(text: str) -> str:
     return text
 
 
+def format_flowise_error(message: str) -> str:
+    msg = repair_mojibake(str(message))
+    if "Unauthorized" in msg:
+        return (
+            "Autenticacao Flowise recusada. No `.env` / secrets use `FLOWISE_API_TOKEN=local-dev` "
+            "quando o chatflow nao tiver API key vinculada. Se vinculou uma API key no Flowise UI, "
+            "use o mesmo valor em `FLOWISE_API_TOKEN`. Reexecute `bootstrap-flowise.ps1` para limpar o vínculo."
+        )
+    if any(
+        token in msg
+        for token in (
+            "Connection error",
+            "ECONNREFUSED",
+            "No models loaded",
+            "fetch failed",
+        )
+    ):
+        return (
+            "LM Studio indisponivel para o Flowise. Inicie o modelo local com "
+            "`cd Flowise/docker; .\\start-stack.ps1` (ou carregue `nvidia/nemotron-3-nano-4b` na porta 1234)."
+        )
+    if "filePath" in msg:
+        return (
+            "Configuracao do agentflow invalida (tools). Reexecute `cd Flowise/docker; .\\bootstrap-flowise.ps1`."
+        )
+    if msg.startswith("Error: predictionsServices.buildChatflow - "):
+        return msg.split("Error: predictionsServices.buildChatflow - ", 1)[1]
+    return msg
+
+
 def iterate_sse_chunks(response: requests.Response):
     for raw_line in response.iter_lines(decode_unicode=True):
         if not raw_line:
@@ -127,6 +157,8 @@ def iterate_sse_chunks(response: requests.Response):
         try:
             decoded = json.loads(payload)
             if isinstance(decoded, dict):
+                if decoded.get("event") == "error" and decoded.get("data"):
+                    raise RuntimeError(format_flowise_error(str(decoded["data"])))
                 if decoded.get("text"):
                     yield repair_mojibake(str(decoded["text"]))
                 elif decoded.get("token"):
@@ -204,24 +236,39 @@ def query_flowise(question: str, placeholder, chat_id: str | None = None):
         timeout=timeout,
         stream=True,
     ) as response:
-        response.raise_for_status()
+        if response.status_code == 401:
+            return format_flowise_error("Unauthorized")
+
         content_type = response.headers.get("content-type", "")
         if "text/event-stream" in content_type:
+            if response.status_code >= 400:
+                return format_flowise_error(response.text or f"HTTP {response.status_code}")
             full_text = ""
-            for chunk in iterate_sse_chunks(response):
-                if st.session_state.cancel_requested:
-                    break
-                if chunk:
-                    full_text += chunk
-                    placeholder.markdown(full_text)
+            try:
+                for chunk in iterate_sse_chunks(response):
+                    if st.session_state.cancel_requested:
+                        break
+                    if chunk:
+                        full_text += chunk
+                        placeholder.markdown(full_text)
+            except RuntimeError as exc:
+                return str(exc)
             if full_text.strip():
                 return repair_mojibake(full_text)
+            return "Flowise nao retornou texto. Verifique LM Studio e o agentflow."
 
-        # Fallback sem streaming real: reaproveita a mesma resposta para evitar nova requisicao.
         try:
-            answer = extract_answer(response.json())
+            data = response.json()
         except ValueError:
+            if not response.ok:
+                return format_flowise_error(response.text or f"HTTP {response.status_code}")
             answer = extract_answer(response.text)
+            return fake_stream(answer, placeholder)
+
+        if not response.ok or data.get("statusCode", 200) >= 400:
+            return format_flowise_error(data.get("message") or str(data))
+
+        answer = extract_answer(data)
         return fake_stream(answer, placeholder)
 
 

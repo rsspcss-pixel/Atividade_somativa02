@@ -275,7 +275,7 @@ services:
             USE_OPENAI_MODEL: "0"
             LOCAL_MODEL_HOST: host.docker.internal
             LM_STUDIO_PORT: "1234"
-            LOCAL_MODEL_NAME: nvidia/nemotron-3-nano-4b:4
+            LOCAL_MODEL_NAME: nvidia/nemotron-3-nano-4b
             LOCAL_MODEL_BASE_URL: http://host.docker.internal:1234/v1
             LOCAL_MODEL_API_KEY: lm-studio
             DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS_OVERRIDE: "300"

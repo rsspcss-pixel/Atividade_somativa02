@@ -14,6 +14,8 @@ import sqlite3
 import uuid
 from pathlib import Path
 
+from agent_config import DEFAULT_CHAT_MODEL
+
 DEFAULT_DB = Path.home() / ".flowise" / "database.sqlite"
 TOOL_JSON = Path(__file__).resolve().parent / "tools" / "avaliar_regressao_deepeval.json"
 CHATFLOW_ID = "a8f3c2e1-9b4d-4a6e-8f1c-2d7e9a0b3c4d"
@@ -83,7 +85,7 @@ def upsert_tool(conn: sqlite3.Connection, workspace_id: str) -> str:
 def build_flow_data(credential_id: str | None) -> dict:
     model_config: dict = {
         "cache": "",
-        "modelName": "google/gemma-3-4b",
+        "modelName": DEFAULT_CHAT_MODEL,
         "temperature": 0.3,
         "streaming": True,
         "maxTokens": "768",
@@ -94,6 +96,7 @@ def build_flow_data(credential_id: str | None) -> dict:
         "baseOptions": "",
         "agentModel": "chatOpenAICustom",
         "basepath": "http://host.docker.internal:1234/v1",
+        "openAIApiKey": "lm-studio",
     }
     if credential_id:
         model_config["FLOWISE_CREDENTIAL_ID"] = credential_id

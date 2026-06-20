@@ -7,7 +7,7 @@ from functools import lru_cache
 
 from deepeval.models import LocalModel
 
-DEFAULT_LOCAL_MODEL = "nvidia/nemotron-3-nano-4b:4"
+DEFAULT_LOCAL_MODEL = "nvidia/nemotron-3-nano-4b"
 DEFAULT_LM_STUDIO_PORT = 1234
 DEFAULT_LOCAL_API_KEY = "lm-studio"
 

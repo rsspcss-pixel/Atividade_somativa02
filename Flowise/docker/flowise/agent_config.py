@@ -7,13 +7,15 @@ from pathlib import Path
 CHATFLOW_ID = "f92dd892-ced9-4396-863b-9675b17242fb"
 AGENT_FLOW_NAME = "Assistente Negociacao"
 TOOL_NAMES = ("buscar_insumo_duckdb", "classificar_risco_renegociacao")
-DEFAULT_CHAT_MODEL = "google/gemma-3-4b"
+DEFAULT_CHAT_MODEL = "nvidia/nemotron-3-nano-4b"
 CLOUD_CHAT_MODEL = "gpt-4o-mini"
 
-# Respostas ageis: menos tokens gerados e menos contexto no prompt
-MAX_TOKENS = "384"
-TEMPERATURE = 0.3
-MEMORY_WINDOW = 4
+# Respostas ageis: menos tokens, menos contexto, sem tools no agente local
+MAX_TOKENS = "128"
+TEMPERATURE = 0.2
+MEMORY_WINDOW = 2
+ENABLE_CHAT_MEMORY = False
+LOCAL_ATTACH_TOOLS = False
 
 KNOWLEDGE_DIR = (
     Path(__file__).resolve().parents[1] / "streamlit" / "data" / "documentos_negociacao"
@@ -21,11 +23,8 @@ KNOWLEDGE_DIR = (
 KNOWLEDGE_FILES = (
     "perfil_empresa_lumina_cosmetics.txt",
     "guia_gestao_lotes_minimos_compra.txt",
-    "catalogo_insumos_destaque_lumina.txt",
-    "parametros_custo_armazenagem_e_servicos_logisticos.txt",
-    "guia_prazo_validade_e_permanencia_estoque.txt",
 )
-KNOWLEDGE_MAX_CHARS = 3200
+KNOWLEDGE_MAX_CHARS = 1400
 DOC_STORE_DESCRIPTION = (
     "Docs Lumina: lotes minimos, EOQ, cobertura, perfil da empresa cosmetica, "
     "custos de armazenagem, validade e insumos destaque."
@@ -53,114 +52,84 @@ def load_knowledge_digest(max_chars: int = KNOWLEDGE_MAX_CHARS) -> str:
 def build_system_message() -> str:
     knowledge = load_knowledge_digest()
     return (
-        "Voce e o assistente de compras da Lumina Cosmetics (fabrica de cosmeticos, SP). "
-        "Responda SEMPRE em portugues do Brasil, de forma AGIL: maximo 4 bullets ou 6 linhas curtas. "
-        "Va direto ao ponto; evite introducoes longas e repeticao. "
-        "Para conceitos de lote minimo, EOQ, cobertura, validade ou perfil da empresa, "
-        "use o CONHECIMENTO BASE abaixo (nao chame ferramenta). "
-        "Chame buscar_insumo_duckdb ou classificar_risco_renegociacao SOMENTE quando o usuario "
-        "pedir numeros de um insumo/fornecedor especifico ou risco de renegociacao. "
-        "Se faltar dado, diga o que falta em 1 linha.\n\n"
+        "Assistente de compras Lumina Cosmetics (SP). Responda em portugues do Brasil, "
+        "de forma CURTA: no maximo 3 bullets ou 4 linhas. Va direto ao ponto, sem introducao. "
+        "Use o CONHECIMENTO BASE para lote minimo, EOQ, cobertura, validade e perfil da empresa. "
+        "Nao invente numeros de insumo; se faltar dado, diga em 1 linha.\n\n"
         f"CONHECIMENTO BASE:\n{knowledge}"
     )
 
 
-def build_flow_data(credential_id: str | None = None, *, cloud: bool = False) -> dict:
+from agentflow_builder import build_agentflow
+
+
+def build_flow_data(
+    credential_id: str | None = None,
+    *,
+    cloud: bool = False,
+    tool_ids: dict[str, str] | None = None,
+) -> dict:
     """Monta flowData do agentflow (local=LM Studio, cloud=OpenAI)."""
+    resolved_tool_ids: tuple[str, ...] = ()
+    if not cloud and LOCAL_ATTACH_TOOLS and tool_ids:
+        resolved_tool_ids = tuple(tool_ids[name] for name in TOOL_NAMES if name in tool_ids)
+
     if cloud:
         model_config: dict = {
             "cache": "",
             "modelName": CLOUD_CHAT_MODEL,
-            "temperature": TEMPERATURE,
+            "temperature": str(TEMPERATURE),
             "streaming": True,
             "maxTokens": MAX_TOKENS,
             "topP": "",
             "frequencyPenalty": "",
             "presencePenalty": "",
             "timeout": "",
+            "strictToolCalling": "",
+            "stopSequence": "",
+            "basepath": "",
+            "proxyUrl": "",
             "baseOptions": "",
-            "agentModel": "chatOpenAI",
+            "allowImageUploads": "",
+            "imageResolution": "low",
+            "reasoningEffort": "",
         }
-        tool_names: tuple[str, ...] = ()
+        agent_model = "chatOpenAI"
+        if credential_id:
+            model_config["credential"] = credential_id
+            model_config["FLOWISE_CREDENTIAL_ID"] = credential_id
     else:
         model_config = {
             "cache": "",
             "modelName": DEFAULT_CHAT_MODEL,
-            "temperature": TEMPERATURE,
+            "temperature": str(TEMPERATURE),
             "streaming": True,
             "maxTokens": MAX_TOKENS,
             "topP": "",
             "frequencyPenalty": "",
             "presencePenalty": "",
             "timeout": "",
-            "baseOptions": "",
-            "agentModel": "chatOpenAICustom",
+            "strictToolCalling": "",
+            "stopSequence": "",
             "basepath": "http://host.docker.internal:1234/v1",
+            "proxyUrl": "",
+            "baseOptions": "",
+            "allowImageUploads": "",
+            "imageResolution": "low",
+            "reasoningEffort": "",
+            "openAIApiKey": "lm-studio",
         }
-        tool_names = TOOL_NAMES
+        agent_model = "chatOpenAICustom"
 
-    if credential_id:
-        model_config["FLOWISE_CREDENTIAL_ID"] = credential_id
-
-    return {
-        "nodes": [
-            {
-                "id": "startAgentflow_0",
-                "type": "agentFlow",
-                "position": {"x": 100, "y": 120},
-                "data": {
-                    "id": "startAgentflow_0",
-                    "label": "Start",
-                    "version": 1.1,
-                    "name": "startAgentflow",
-                    "type": "Start",
-                    "inputs": {"startInputType": "chatInput"},
-                },
-            },
-            {
-                "id": "agentAgentflow_0",
-                "type": "agentFlow",
-                "position": {"x": 420, "y": 120},
-                "data": {
-                    "id": "agentAgentflow_0",
-                    "label": AGENT_FLOW_NAME,
-                    "version": 1.1,
-                    "name": "agentAgentflow",
-                    "type": "Agent",
-                    "inputs": {
-                        "agentModel": model_config["agentModel"],
-                        "agentMessages": [{"role": "system", "content": build_system_message()}],
-                        "agentTools": [
-                            {
-                                "agentSelectedTool": tool_name,
-                                "agentSelectedToolRequiresHumanInput": "",
-                            }
-                            for tool_name in tool_names
-                        ],
-                        "agentKnowledgeDocumentStores": [],
-                        "agentKnowledgeVSEmbeddings": "",
-                        "agentEnableMemory": True,
-                        "agentMemoryType": "windowSize",
-                        "agentMemoryWindowSize": MEMORY_WINDOW,
-                        "agentUserMessage": "",
-                        "agentReturnResponseAs": "assistantMessage",
-                        "agentStructuredOutput": "",
-                        "agentUpdateState": "",
-                        "agentModelConfig": model_config,
-                    },
-                },
-            },
-        ],
-        "edges": [
-            {
-                "id": "edge_start_agent",
-                "source": "startAgentflow_0",
-                "target": "agentAgentflow_0",
-                "type": "agentFlow",
-                "data": {"sourceColor": "#7EE787", "targetColor": "#4DD0E1"},
-            }
-        ],
-    }
+    return build_agentflow(
+        label=AGENT_FLOW_NAME,
+        system_message=build_system_message(),
+        tool_ids=resolved_tool_ids,
+        model_config=model_config,
+        agent_model=agent_model,
+        memory_window=MEMORY_WINDOW,
+        enable_memory=ENABLE_CHAT_MEMORY,
+    )
 
 
 def prediction_url(base_url: str) -> str:

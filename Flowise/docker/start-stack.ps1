@@ -14,8 +14,8 @@
 #>
 [CmdletBinding()]
 param(
-    [string] $LmStudioModel = "google/gemma-3-4b",
-    [int] $LmStudioContextLength = 8192,
+    [string] $LmStudioModel = "nvidia/nemotron-3-nano-4b",
+    [int] $LmStudioContextLength = 4096,
     [int] $LmStudioPort = 1234,
     [switch] $SkipLmStudio,
     [switch] $Build,
@@ -298,6 +298,10 @@ try {
     Write-Host "Flowise stack - LM Studio + Docker Compose" -ForegroundColor White
 
     if (-not $SkipLmStudio) {
+        $nemotronCfg = Join-Path $ScriptDir "configure-lmstudio-nemotron.ps1"
+        if (Test-Path -LiteralPath $nemotronCfg) {
+            & $nemotronCfg
+        }
         Start-LmStudioStack -Model $LmStudioModel -ContextLength $LmStudioContextLength -Port $LmStudioPort -ReadyTimeoutSec $LmStudioReadyTimeoutSec
     }
     else {

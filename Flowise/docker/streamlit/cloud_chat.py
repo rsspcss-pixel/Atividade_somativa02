@@ -30,8 +30,8 @@ def query_openai_chat(
     payload = {
         "model": model,
         "stream": True,
-        "max_tokens": 384,
-        "temperature": 0.3,
+        "max_tokens": 128,
+        "temperature": 0.2,
         "messages": [
             {"role": "system", "content": build_system_message(knowledge_dir)},
             {"role": "user", "content": question},

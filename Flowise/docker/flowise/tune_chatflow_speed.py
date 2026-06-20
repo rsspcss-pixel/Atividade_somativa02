@@ -16,6 +16,8 @@ from pathlib import Path
 from agent_config import (
     CHATFLOW_ID,
     DEFAULT_CHAT_MODEL,
+    ENABLE_CHAT_MEMORY,
+    LOCAL_ATTACH_TOOLS,
     MAX_TOKENS,
     MEMORY_WINDOW,
     TEMPERATURE,
@@ -38,13 +40,28 @@ def tune_flow_data(flow_data: dict) -> tuple[dict, list[str]]:
             inputs["agentUserMessage"] = ""
             changes.append("agentUserMessage removida")
 
-        if inputs.get("agentMemoryType") != "windowSize":
-            inputs["agentMemoryType"] = "windowSize"
-            changes.append("memoria: windowSize")
+        if inputs.get("agentEnableMemory") != ENABLE_CHAT_MEMORY:
+            inputs["agentEnableMemory"] = ENABLE_CHAT_MEMORY
+            changes.append(f"memoria: {'on' if ENABLE_CHAT_MEMORY else 'off'}")
 
-        if inputs.get("agentMemoryWindowSize") != MEMORY_WINDOW:
-            inputs["agentMemoryWindowSize"] = MEMORY_WINDOW
-            changes.append(f"memoria: window={MEMORY_WINDOW}")
+        if ENABLE_CHAT_MEMORY:
+            if inputs.get("agentMemoryType") != "windowSize":
+                inputs["agentMemoryType"] = "windowSize"
+                changes.append("memoria: windowSize")
+            if inputs.get("agentMemoryWindowSize") != MEMORY_WINDOW:
+                inputs["agentMemoryWindowSize"] = MEMORY_WINDOW
+                changes.append(f"memoria: window={MEMORY_WINDOW}")
+        else:
+            if inputs.get("agentMemoryType"):
+                inputs["agentMemoryType"] = ""
+                changes.append("memoria: desligada")
+            if inputs.get("agentMemoryWindowSize"):
+                inputs["agentMemoryWindowSize"] = ""
+                changes.append("memoria: window removida")
+
+        if not LOCAL_ATTACH_TOOLS and inputs.get("agentTools"):
+            inputs["agentTools"] = ""
+            changes.append("tools removidas (latencia)")
 
         messages = inputs.get("agentMessages") or []
         if messages and messages[0].get("role") == "system":
