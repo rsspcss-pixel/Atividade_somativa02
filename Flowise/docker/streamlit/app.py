@@ -1194,7 +1194,7 @@ if not CHAT_READY:
         "```toml\nCHAT_BACKEND = \"openai\"\nOPENAI_API_KEY = \"sk-...\"\n"
         "OPENAI_CHAT_MODEL = \"gpt-4o-mini\"\nCHROMA_ENABLED = \"0\"\n```\n\n"
         f"Detalhe tecnico: {CHAT_CONFIG_ERROR}\n\n"
-        f"Versao config: `{APP_CONFIG_VERSION}` (se nao for `2026.06.20-cloud3`, faca **Reboot app** no Cloud)."
+        f"Versao config: `{APP_CONFIG_VERSION}` (se nao for `2026.06.20-cloud4`, faca **Reboot app** no Cloud)."
     )
 elif CHAT_BACKEND == "openai":
     st.caption(f"Chat: OpenAI direto (Streamlit Cloud) — config `{APP_CONFIG_VERSION}`.")

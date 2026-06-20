@@ -30,7 +30,7 @@ GUARDRAILS_LINK_ALLOWLIST: list[str] = []
 
 _INITIALIZED = False
 _PATHS_INITIALIZED = False
-APP_CONFIG_VERSION = "2026.06.20-cloud3"
+APP_CONFIG_VERSION = "2026.06.20-cloud4"
 
 
 def _running_in_docker() -> bool:
